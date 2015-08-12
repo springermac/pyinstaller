@@ -175,5 +175,7 @@ int main(int argc, char* argv[])
         if (extractionpath != NULL)
             free(extractionpath);
     }
+    VS("LOADER: RC: %d\n", rc);
+
     return rc;
 }
