@@ -169,8 +169,8 @@ int main(int argc, char* argv[])
         VS("LOADER: Back to parent\n");
 
         VS("LOADER: Doing cleanup\n");
-        if (archive_status->has_temp_directory == true)
-            pyi_remove_temp_path(archive_status->temppath);
+//        if (archive_status->has_temp_directory == true)
+//            pyi_remove_temp_path(archive_status->temppath);
 //        pyi_arch_status_free_memory(archive_status);
 //        if (extractionpath != NULL)
 //            free(extractionpath);
