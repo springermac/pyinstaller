@@ -24,12 +24,12 @@ environment:
       #PYTHON_ARCH: "64"
       #PYWIN_ARCH: "win-amd64"
       #WAF_ARGS: ""
-
-    - PYTHON: "C:\\Python34"
-      PYTHON_VERSION: "3.4"
-      PYTHON_ARCH: "32"
-      PYWIN_ARCH: "win32"
-      WAF_ARGS: ""
+#
+#    - PYTHON: "C:\\Python34"
+#      PYTHON_VERSION: "3.4"
+#      PYTHON_ARCH: "32"
+#      PYWIN_ARCH: "win32"
+#      WAF_ARGS: ""
 
 #    - PYTHON: "C:\\Python33"
 #      PYTHON_VERSION: "3.3"
@@ -115,6 +115,6 @@ build: none
 test_script:
   # Split tests into several subprocesses.
 
-  # Try just this one test, with capturing disabled so we can see the output from
-  # both the child and parent in `onefile` mode.
-  - "%CMD_IN_ENV% py.test -k test_ascii_path -s"
+  # Trying to discover why pytest fails with EBADF when calling dup2 to resume FD capture
+  # Run a bunch of tests, hopefully enough to expose the error
+  - "%CMD_IN_ENV% py.test -k "module or python or encoding or path" -n 3"
