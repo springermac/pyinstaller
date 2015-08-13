@@ -21,6 +21,10 @@ from PyInstaller.compat import is_darwin, is_win, is_py2, safe_repr
 from PyInstaller.depend.analysis import initialize_modgraph
 from PyInstaller.utils.win32 import winutils
 
+# Find out how bad the EBADFs are
+import _pytest
+_pytest.capture.FDCapture.__repr__ = lambda self: \
+    "<FDCapture targetfd=%s oldfd=%s tmpfd=%s>" % (self.targetfd, self.targetfd_save, self.tmpfile_fd)
 
 # Directory with Python scripts for functional tests. E.g. main scripts, etc.
 _SCRIPT_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'scripts')
