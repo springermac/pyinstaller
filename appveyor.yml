@@ -117,4 +117,4 @@ test_script:
 
   # Trying to discover why pytest fails with EBADF when calling dup2 to resume FD capture
   # Run a bunch of tests, hopefully enough to expose the error
-  - "%CMD_IN_ENV% py.test -k "module or python or encoding or path" -n 3"
+  - "%CMD_IN_ENV% py.test -k \"module or python or encoding or path\" -n 3"
