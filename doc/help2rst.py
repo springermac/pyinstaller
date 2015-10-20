@@ -80,14 +80,14 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--generate-headings',
                         action='store_true', default=True,
-                        help=("Generate section headings from arumgent groups"
+                        help=("Generate section headings from argument groups"
                               " (this is the default)"))
-    parser.add_argument('--no-generate-headings',action='store_false',
+    parser.add_argument('--no-generate-headings', action='store_false',
                         dest='generate_headings')
     g = parser.add_argument_group('tst')
     g.add_argument('--headings-character', default="-",
-                        help=("Character to use for underlining section headers"
-                              " (default: -)"))
+                   help=("Character to use for underlining section headers"
+                         " (default: -)"))
     parser.add_argument('program')
     args = parser.parse_args()
     print(process(**vars(args)))

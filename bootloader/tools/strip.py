@@ -23,21 +23,25 @@ If stripping at installation time is preferred, use the following::
         try:
             tsk = kw['tsk']
         except KeyError:
-    	    pass
+            pass
         else:
-    	    if isinstance(tsk.task, ccroot.link_task):
-    		    self.cmd_and_log('strip %s' % tgt)
+            if isinstance(tsk.task, ccroot.link_task):
+                self.cmd_and_log('strip %s' % tgt)
     Build.InstallContext.copy_fun = copy_fun
 """
+
 
 def configure(conf):
     conf.find_program('strip')
 
 from waflib import Task, TaskGen
+
+
 class strip(Task.Task):
     run_str = '${STRIP} ${SRC}'
-    color   = 'BLUE'
-    after   = ['cprogram', 'cxxprogram', 'cshlib', 'cxxshlib', 'fcprogram', 'fcshlib']
+    color = 'BLUE'
+    after = ['cprogram', 'cxxprogram', 'cshlib', 'cxxshlib', 'fcprogram', 'fcshlib']
+
 
 @TaskGen.feature('strip')
 @TaskGen.after('apply_link')

@@ -36,6 +36,7 @@ setup(
 workdir = os.getcwd()
 OLDPWD = os.getcwd()
 
+
 def make_package(pkgname, namespace_packages, modules, zip_safe=False,
                  declare_namespace_template=declare_namespace_template):
     base = os.path.join(workdir, pkgname)
