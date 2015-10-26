@@ -37,7 +37,7 @@ def __add_options(parser):
                         help=('Amount of detail in build-time console messages. '
                               'LEVEL may be one of %s (default: %%(default)s).'
                               % ', '.join(levels))
-    )
+                        )
 
 
 def __process_options(parser, opts):

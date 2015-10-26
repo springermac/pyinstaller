@@ -212,7 +212,6 @@ def __scan_code_instruction_for_ctypes(co, instructions):
             if isinstance(soname, str):
                 return soname
 
-
     op, oparg, conditional, curline = next(instructions)
     expected_ops = (LOAD_GLOBAL, LOAD_NAME)
 
@@ -370,6 +369,7 @@ def _resolveCtypesImports(cbinaries):
 
 
 LDCONFIG_CACHE = None  # cache the output of `/sbin/ldconfig -p`
+
 
 def load_ldconfig_cache():
     """

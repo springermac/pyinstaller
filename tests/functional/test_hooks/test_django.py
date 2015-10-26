@@ -16,6 +16,7 @@ import pytest
 
 from PyInstaller.utils.tests import importorskip
 
+
 @importorskip('django')
 # Django test might sometimes hang.
 @pytest.mark.timeout(timeout=7*60)

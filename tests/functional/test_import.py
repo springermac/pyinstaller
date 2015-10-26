@@ -188,6 +188,7 @@ _template_ctypes_CDLL_find_library = """
         print('>>> file found')
     """
 
+
 # Ghostscript's libgs.so should be available in may Unix/Linux systems
 #
 # At least on Linux, we can not use our own `ctypes_dylib` because
@@ -267,7 +268,7 @@ def test_ctypes_in_func_gen(pyi_builder, monkeypatch, funcname,
       def g():
         lib = %s(%%(soname)r)
     """ % funcname +
-    _template_ctypes_test + """
+              _template_ctypes_test + """
       g()
     f()
     """)
