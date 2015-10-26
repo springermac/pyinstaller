@@ -419,7 +419,7 @@ class CArchiveWriter(ArchiveWriter):
 
     def save_trailer(self, tocpos):
         """
-        Save the table of contents and the cookie for the bootlader to
+        Save the table of contents and the cookie for the bootloader to
         disk.
 
         CArchives can be opened from the end - the cookie points

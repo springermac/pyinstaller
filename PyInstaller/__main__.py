@@ -16,6 +16,7 @@ import os
 import argparse
 import platform
 
+
 import PyInstaller.building.makespec
 import PyInstaller.building.build_main
 import PyInstaller.compat
