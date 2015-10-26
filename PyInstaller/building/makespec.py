@@ -203,7 +203,6 @@ def __add_options(parser):
                         "not to follow policies that redirect to newer versions, "
                         "and will try to bundle the exact versions of the assembly.")
 
-
     g = parser.add_argument_group('Mac OS X specific options')
     g.add_argument('--osx-bundle-identifier', dest='bundle_identifier',
                    help='Mac OS X .app bundle identifier is used as the default unique program '

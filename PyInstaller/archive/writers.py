@@ -95,7 +95,7 @@ class ArchiveWriter(object):
         self.lib.close()
 
 
-    ####### manages keeping the internal TOC and the guts in sync #######
+    # --- manages keeping the internal TOC and the guts in sync ---
     def add(self, entry):
         """
         Override this to influence the mechanics of the Archive.

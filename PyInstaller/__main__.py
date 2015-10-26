@@ -51,6 +51,7 @@ def __add_options(parser):
                         version=__version__,
                         help='Show program version info and exit.')
 
+
 def run(pyi_args=None, pyi_config=None):
     """
     pyi_args     allows running PyInstaller programatically without a subprocess
