@@ -223,7 +223,8 @@ class Analysis(Target):
             for name, pth in format_binaries_and_datas(datas, workingdir=spec_dir):
                 self.binaries.append((name, pth, 'DATA'))
 
-    _GUTS = (# input parameters
+    _GUTS = (
+            # input parameters
             ('inputs', _check_guts_eq),  # parameter `scripts`
             ('pathex', _check_guts_eq),
             ('hiddenimports', _check_guts_eq),
@@ -233,10 +234,10 @@ class Analysis(Target):
             ('win_no_prefer_redirects', _check_guts_eq),
             ('win_private_assemblies', _check_guts_eq),
 
-            #'cipher': no need to check as it is implied by an
+            # 'cipher': no need to check as it is implied by an
             # additional hidden import
 
-            #calculated/analysed values
+            # calculated/analysed values
             ('scripts', _check_guts_toc_mtime),
             ('pure', lambda *args: _check_guts_toc_mtime(*args, **{'pyc': 1})),
             ('binaries', _check_guts_toc_mtime),
