@@ -183,9 +183,9 @@ def __recursivly_scan_code_objects_for_ctypes(co, binaries):
         # instruction, so the code resides in a separate function
         # for clarity.
         try:
-            bin = __scan_code_instruction_for_ctypes(co, instructions)
-            if bin:
-                binaries.append(bin)
+            bin_ = __scan_code_instruction_for_ctypes(co, instructions)
+            if bin_:
+                binaries.append(bin_)
         except StopIteration:
             break
 
