@@ -15,7 +15,6 @@ Main command-line interface to PyInstaller.
 import os
 import argparse
 import platform
-import sys
 
 import PyInstaller.building.makespec
 import PyInstaller.building.build_main
@@ -38,7 +37,7 @@ def run_makespec(filenames, **opts):
         pathex.extend(p.split(os.pathsep))
 
     spec_file = PyInstaller.building.makespec.main(filenames, **opts)
-    logger.info('wrote %s' % spec_file)
+    logger.info('wrote %s', spec_file)
     return spec_file
 
 

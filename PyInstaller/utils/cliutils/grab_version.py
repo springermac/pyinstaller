@@ -9,7 +9,6 @@
 
 
 import codecs
-import os
 import argparse
 
 import PyInstaller.utils.win32.versioninfo
@@ -20,9 +19,9 @@ def run():
     PyInstaller.log.init()
 
     parser = argparse.ArgumentParser(
-        epilog = ('The printed output may be saved to a file, edited and '
-                  'used as the input for a version resource on any of the '
-                  'executable targets in an Installer spec file.'))
+        epilog=('The printed output may be saved to a file, edited and '
+                'used as the input for a version resource on any of the '
+                'executable targets in an Installer spec file.'))
     parser.add_argument('exe_file', metavar='exe-file',
                         help="full pathname of a Windows executable")
     parser.add_argument('out_filename', metavar='out-filename', nargs='?',
