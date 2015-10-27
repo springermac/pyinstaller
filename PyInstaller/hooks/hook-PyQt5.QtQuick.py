@@ -18,16 +18,17 @@ hiddenimports = ['sip',
 from PyInstaller.utils.hooks import qt5_qml_data, qt5_qml_plugins_binaries
 
 # TODO: we should parse the Qml files to see what we need to import.
-dirs = [#'Qt',
-        #'QtAudioEngine',
-        #'QtGraphicalEffects',
-        #'QtMultiMedia',
-        'QtQml',
-        'QtQuick',
-        'QtQuick.2',
-        #'QtSensors',
-        #'QtTest'
-        ]
+dirs = [
+    # 'Qt',
+    # 'QtAudioEngine',
+    # 'QtGraphicalEffects',
+    # 'QtMultiMedia',
+    'QtQml',
+    'QtQuick',
+    'QtQuick.2',
+    # 'QtSensors',
+    # 'QtTest'
+]
 
 datas = [qt5_qml_data(dir) for dir in dirs]
 

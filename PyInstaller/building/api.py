@@ -250,8 +250,8 @@ class PKG(Target):
                     seen_fnms_typ[fnm] = typ
 
                     fnm = check_cache(fnm, strip=self.strip_binaries,
-                                     upx=(self.upx_binaries and (is_win or is_cygwin)),
-                                     dist_nm=inm)
+                                      upx=(self.upx_binaries and (is_win or is_cygwin)),
+                                      dist_nm=inm)
 
                     mytoc.append((inm, fnm, self.cdict.get(typ, 0),
                                   self.xformdict.get(typ, 'b')))
@@ -494,9 +494,9 @@ class EXE(Target):
             self._copyfile(exe, tmpnm)
             os.chmod(tmpnm, 0o755)
             if self.icon:
-                icon.CopyIcons(tmpnm, self.icon)
+                icon.copy_icons(tmpnm, self.icon)
             if self.versrsrc:
-                versioninfo.SetVersion(tmpnm, self.versrsrc)
+                versioninfo.set_version(tmpnm, self.versrsrc)
             for res in self.resources:
                 res = res.split(",")
                 for i in range(1, len(res)):
@@ -513,10 +513,10 @@ class EXE(Target):
                 if len(res) > 3:
                     reslang = res[3]
                 try:
-                    winresource.UpdateResourcesFromResFile(tmpnm, resfile,
-                                                        [restype or "*"],
-                                                        [resname or "*"],
-                                                        [reslang or "*"])
+                    winresource.update_resources_from_res_file(tmpnm, resfile,
+                                                               [restype or "*"],
+                                                               [resname or "*"],
+                                                               [reslang or "*"])
                 except winresource.pywintypes.error as exc:
                     if exc.args[0] != winresource.ERROR_BAD_EXE_FORMAT:
                         logger.error("Error while updating resources in %s"
@@ -534,11 +534,11 @@ class EXE(Target):
                                      "contain resources")
                         continue
                     try:
-                        winresource.UpdateResourcesFromDataFile(tmpnm,
-                                                             resfile,
-                                                             restype,
-                                                             [resname],
-                                                             [reslang or 0])
+                        winresource.update_resources_from_data_file(tmpnm,
+                                                                    resfile,
+                                                                    restype,
+                                                                    [resname],
+                                                                    [reslang or 0])
                     except winresource.pywintypes.error:
                         logger.error("Error while updating resource %s %s in %s"
                                      " from data file %s",
@@ -673,8 +673,8 @@ class COLLECT(Target):
                 os.makedirs(todir)
             if typ in ('EXTENSION', 'BINARY'):
                 fnm = check_cache(fnm, strip=self.strip_binaries,
-                                 upx=(self.upx_binaries and (is_win or is_cygwin)),
-                                 dist_nm=inm)
+                                  upx=(self.upx_binaries and (is_win or is_cygwin)),
+                                  dist_nm=inm)
             if typ != 'DEPENDENCY':
                 shutil.copy(fnm, tofnm)
                 try:

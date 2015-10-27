@@ -50,7 +50,7 @@ class File(object):
         Return a dict of the form {type_: {name: {language: data}}} which
         might also be empty if no matching resources were found.
         """
-        return GetResources(self.filename, types, names, languages)
+        return get_resources(self.filename, types, names, languages)
 
     def update_resources(self, data, type_, names=None, languages=None):
         """
@@ -60,7 +60,7 @@ class File(object):
         names = a list of resource names to update (None = all)
         languages = a list of resource languages to update (None = all)
         """
-        UpdateResources(self.filename, data, type_, names, languages)
+        update_resources(self.filename, data, type_, names, languages)
 
     def update_resources_from_datafile(self, srcpath, type_, names=None,
                                        languages=None):
@@ -71,8 +71,8 @@ class File(object):
         names = a list of resource names to update (None = all)
         languages = a list of resource languages to update (None = all)
         """
-        UpdateResourcesFromDataFile(self.filename, srcpath, type_, names,
-                                    languages)
+        update_resources_from_data_file(self.filename, srcpath, type_, names,
+                                        languages)
 
     def update_resources_from_dict(self, res, types=None, names=None,
                                    languages=None):
@@ -83,8 +83,8 @@ class File(object):
         names = a list of resource names to update (None = all)
         languages = a list of resource languages to update (None = all)
         """
-        UpdateResourcesFromDict(self.filename, res, types, names,
-                                languages)
+        update_resources_from_dict(self.filename, res, types, names,
+                                   languages)
 
     def update_resources_from_resfile(self, srcpath, types=None, names=None,
                                       languages=None):
@@ -95,11 +95,11 @@ class File(object):
         names = a list of resource names to update (None = all)
         languages = a list of resource languages to update (None = all)
         """
-        UpdateResourcesFromResFile(self.filename, srcpath, types, names,
-                                   languages)
+        update_resources_from_res_file(self.filename, srcpath, types, names,
+                                       languages)
 
 
-def _GetResources(hsrc, types=None, names=None, languages=None):
+def _get_resources(hsrc, types=None, names=None, languages=None):
     """
     Get resources from hsrc.
 
@@ -158,7 +158,7 @@ def _GetResources(hsrc, types=None, names=None, languages=None):
     return res
 
 
-def GetResources(filename, types=None, names=None, languages=None):
+def get_resources(filename, types=None, names=None, languages=None):
     """
     Get resources from dll/exe file.
 
@@ -169,12 +169,12 @@ def GetResources(filename, types=None, names=None, languages=None):
     might also be empty if no matching resources were found.
     """
     hsrc = win32api.LoadLibraryEx(filename, 0, LOAD_LIBRARY_AS_DATAFILE)
-    res = _GetResources(hsrc, types, names, languages)
+    res = _get_resources(hsrc, types, names, languages)
     win32api.FreeLibrary(hsrc)
     return res
 
 
-def UpdateResources(dstpath, data, type_, names=None, languages=None):
+def update_resources(dstpath, data, type_, names=None, languages=None):
     """
     Update or add resource data in dll/exe file dstpath.
 
@@ -183,7 +183,7 @@ def UpdateResources(dstpath, data, type_, names=None, languages=None):
     languages = a list of resource languages to update (None = all)
     """
     # Look for existing resources.
-    res = GetResources(dstpath, [type_], names, languages)
+    res = get_resources(dstpath, [type_], names, languages)
     # add type_, names and languages not already present in existing resources
     if not type_ in res and type_ != "*":
         res[type_] = {}
@@ -207,8 +207,8 @@ def UpdateResources(dstpath, data, type_, names=None, languages=None):
     win32api.EndUpdateResource(hdst, 0)
 
 
-def UpdateResourcesFromDataFile(dstpath, srcpath, type_, names=None,
-                                languages=None):
+def update_resources_from_data_file(dstpath, srcpath, type_, names=None,
+                                    languages=None):
     """
     Update or add resource data from file srcpath in dll/exe file dstpath.
 
@@ -219,11 +219,11 @@ def UpdateResourcesFromDataFile(dstpath, srcpath, type_, names=None,
     src = open(srcpath, "rb")
     data = src.read()
     src.close()
-    UpdateResources(dstpath, data, type_, names, languages)
+    update_resources(dstpath, data, type_, names, languages)
 
 
-def UpdateResourcesFromDict(dstpath, res, types=None, names=None,
-                            languages=None):
+def update_resources_from_dict(dstpath, res, types=None, names=None,
+                               languages=None):
     """
     Update or add resources from resource dict in dll/exe file dstpath.
 
@@ -243,13 +243,13 @@ def UpdateResourcesFromDict(dstpath, res, types=None, names=None,
                 if not names or name in names:
                     for language in res[type_][name]:
                         if not languages or language in languages:
-                            UpdateResources(dstpath,
-                                            res[type_][name][language],
-                                            [type_], [name], [language])
+                            update_resources(dstpath,
+                                             res[type_][name][language],
+                                             [type_], [name], [language])
 
 
-def UpdateResourcesFromResFile(dstpath, srcpath, types=None, names=None,
-                               languages=None):
+def update_resources_from_res_file(dstpath, srcpath, types=None, names=None,
+                                   languages=None):
     """
     Update or add resources from dll/exe file srcpath in dll/exe file dstpath.
 
@@ -257,5 +257,5 @@ def UpdateResourcesFromResFile(dstpath, srcpath, types=None, names=None,
     names = a list of resource names to update (None = all)
     languages = a list of resource languages to update (None = all)
     """
-    res = GetResources(srcpath, types, names, languages)
-    UpdateResourcesFromDict(dstpath, res)
+    res = get_resources(srcpath, types, names, languages)
+    update_resources_from_dict(dstpath, res)

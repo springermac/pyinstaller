@@ -103,7 +103,7 @@ def test_tkinter(pyi_builder):
 
 @xfail(is_darwin, reason='Issue #1895.')
 @importorskip('FixTk')
-def test_tkinter_FixTk(pyi_builder):
+def test_tkinter_fix_tk(pyi_builder):
     # check if Tkinter includes FixTk
     # TODO: Python 3 contains module 'tkinter._fix' - does it need any special test or handling?
     # TODO: How does the following code check if FixTk is included?
@@ -114,6 +114,7 @@ def test_tkinter_FixTk(pyi_builder):
     except ImportError:
         import tkinter
     """)
+
 
 @importorskip('zmq')
 def test_zmq(pyi_builder):
@@ -264,7 +265,7 @@ def test_PyQt4_QtWebKit(pyi_builder):
 
 
 @importorskip('PyQt4')
-def test_PyQt4_uic(tmpdir, pyi_builder, data_dir):
+def test_pyqt4_uic(tmpdir, pyi_builder, data_dir):
     # Note that including the data_dir fixture copies files needed by this test.
     pyi_builder.test_script('pyi_lib_PyQt4-uic.py')
 

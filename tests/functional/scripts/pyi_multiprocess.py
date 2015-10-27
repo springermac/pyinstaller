@@ -22,15 +22,15 @@ import sys
 
 
 class SendeventProcess(multiprocessing.Process):
-    def __init__(self, resultQueue):
-        self.resultQueue = resultQueue
+    def __init__(self, result_queue):
+        self.result_queue = result_queue
 
         multiprocessing.Process.__init__(self)
         self.start()
 
     def run(self):
         print('SendeventProcess')
-        self.resultQueue.put((1, 2))
+        self.result_queue.put((1, 2))
         print('SendeventProcess')
 
 
@@ -39,6 +39,6 @@ if __name__ == '__main__':
     if sys.platform.startswith('win'):
         multiprocessing.freeze_support()
     print('main')
-    resultQueue = multiprocessing.Queue()
-    SendeventProcess(resultQueue)
+    result_queue = multiprocessing.Queue()
+    SendeventProcess(result_queue)
     print('main')

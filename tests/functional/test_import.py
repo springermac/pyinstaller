@@ -62,7 +62,7 @@ def test_relative_import3(pyi_builder):
     pyi_builder.test_source(
         """
         from pyi_testmod_relimp3a.aa import a1
-        print(a1.getString())
+        print(a1.get_string())
         """
     )
 
@@ -124,7 +124,7 @@ def test_import_pyqt5_uic_port(pyi_builder):
 
 #--- ctypes ----
 
-def test_ctypes_CDLL_c(pyi_builder):
+def test_ctypes_cdll_c(pyi_builder):
     # Make sure we are able to load the MSVCRXX.DLL resp. libc.so we are
     # currently bound. This is some of a no-brainer since the resp. dll/so
     # is collected anyway.
@@ -136,11 +136,12 @@ def test_ctypes_CDLL_c(pyi_builder):
         """)
 
 import PyInstaller.depend.utils
-__orig_resolveCtypesImports = PyInstaller.depend.utils._resolveCtypesImports
+__orig_resolveCtypesImports = PyInstaller.depend.utils._resolve_ctypes_imports
 
-def __monkeypatch_resolveCtypesImports(monkeypatch, compiled_dylib):
 
-    def mocked_resolveCtypesImports(*args, **kwargs):
+def __monkeypatch_resolve_ctypes_imports(monkeypatch, compiled_dylib):
+
+    def mocked_resolve_ctypes_imports(*args, **kwargs):
         from PyInstaller.config import CONF
         old_pathex = CONF['pathex']
         CONF['pathex'].append(str(compiled_dylib))
@@ -149,11 +150,11 @@ def __monkeypatch_resolveCtypesImports(monkeypatch, compiled_dylib):
         return res
 
     # Add the path to ctypes_dylib to pathex, only for
-    # _resolveCtypesImports. We can not monkeypath CONF['pathex']
+    # _resolve_ctypes_imports. We can not monkeypath CONF['pathex']
     # here, as it will be overwritten when pyi_builder is starting up.
-    # So be monkeypatch _resolveCtypesImports by a wrapper.
-    monkeypatch.setattr(PyInstaller.depend.utils, "_resolveCtypesImports",
-                        mocked_resolveCtypesImports)
+    # So be monkeypatch _resolve_ctypes_imports by a wrapper.
+    monkeypatch.setattr(PyInstaller.depend.utils, "_resolve_ctypes_imports",
+                        mocked_resolve_ctypes_imports)
 
 
 def skip_if_lib_missing(libname, text=None):
@@ -197,7 +198,7 @@ _template_ctypes_CDLL_find_library = """
 # thus checks if libgs.so is included into the frozen exe.
 # TODO: Check how this behaves on other platforms.
 @skip_if_lib_missing('gs', 'libgs.so (Ghostscript)')
-def test_ctypes_CDLL_find_library__gs(pyi_builder):
+def test_ctypes_cdll_find_library__gs(pyi_builder):
     libname = 'gs'
     pyi_builder.test_source(_template_ctypes_CDLL_find_library % locals())
 
@@ -249,7 +250,7 @@ def test_ctypes_gen(pyi_builder, monkeypatch, funcname, compiled_dylib, test_id)
         lib = %s(%%(soname)r)
     """ % funcname + _template_ctypes_test
 
-    __monkeypatch_resolveCtypesImports(monkeypatch, compiled_dylib.dirname)
+    __monkeypatch_resolve_ctypes_imports(monkeypatch, compiled_dylib.dirname)
     pyi_builder.test_source(source % locals(), test_id=test_id)
 
 
@@ -272,7 +273,7 @@ def test_ctypes_in_func_gen(pyi_builder, monkeypatch, funcname,
       g()
     f()
     """)
-    __monkeypatch_resolveCtypesImports(monkeypatch, compiled_dylib.dirname)
+    __monkeypatch_resolve_ctypes_imports(monkeypatch, compiled_dylib.dirname)
     pyi_builder.test_source(source % locals(), test_id=test_id)
 
 

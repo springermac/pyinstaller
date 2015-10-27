@@ -111,10 +111,10 @@ class IconFile:
         return data
 
 
-def CopyIcons_FromIco(dstpath, srcpath, id=1):
-    import win32api #, win32con
-    icons = map(IconFile, srcpath)
-    logger.info("Updating icons from %s to %s", srcpath, dstpath)
+def copy_icons_from_ico(dstpath_, srcpath_, id_=1):
+    import win32api  # , win32con
+    icons = map(IconFile, srcpath_)
+    logger.info("Updating icons from %s to %s", srcpath_, dstpath_)
 
     hdst = win32api.BeginUpdateResource(dstpath, 0)
 
@@ -131,7 +131,8 @@ def CopyIcons_FromIco(dstpath, srcpath, id=1):
 
     win32api.EndUpdateResource(hdst, 0)
 
-def CopyIcons(dstpath, srcpath):
+
+def copy_icons(dstpath_, srcpath_):
     import os.path
 
     if type(srcpath) in StringTypes:
@@ -157,12 +158,12 @@ def CopyIcons(dstpath, srcpath):
             if s[1] is not None:
                 raise ValueError('index not allowed for .ico files')
             srcs.append(s[0])
-        return CopyIcons_FromIco(dstpath, srcs)
+        return copy_icons_from_ico(dstpath_, srcs)
 
     srcpath,index = srcpath[0]
     srcext = os.path.splitext(srcpath)[1]
     if srcext.lower() == '.ico':
-        return CopyIcons_FromIco(dstpath, [srcpath])
+        return copy_icons_from_ico(dstpath_, [srcpath_])
     if index is not None:
         logger.info("Updating icons from %s, %d to %s", srcpath, index, dstpath)
     else:
@@ -189,4 +190,4 @@ if __name__ == "__main__":
 
     dstpath = sys.argv[1]
     srcpath = sys.argv[2:]
-    CopyIcons(dstpath, srcpath)
+    copy_icons(dstpath, srcpath)

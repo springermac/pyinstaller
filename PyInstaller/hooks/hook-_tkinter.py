@@ -13,7 +13,7 @@ import sys
 
 from PyInstaller.compat import is_win, is_darwin, is_unix, is_venv, base_prefix
 from PyInstaller.compat import modname_tkinter
-from PyInstaller.depend.bindepend import selectImports, getImports
+from PyInstaller.depend.bindepend import select_imports, get_imports
 from PyInstaller.building.datastruct import Tree
 from PyInstaller.utils.hooks import exec_statement, logger
 
@@ -156,7 +156,7 @@ def _find_tcl_tk(hook_api):
         2-tuple whose first element is the value of `${TCL_LIBRARY}` and whose
         second element is the value of `${TK_LIBRARY}`.
     """
-    bins = selectImports(hook_api.__file__)
+    bins = select_imports(hook_api.__file__)
 
     if is_darwin:
         # _tkinter depends on system Tcl/Tk frameworks.
@@ -165,7 +165,7 @@ def _find_tcl_tk(hook_api):
             # 'hook_api.binaries' can't be used because on Mac OS X _tkinter.so
             # might depend on system Tcl/Tk frameworks and these are not
             # included in 'hook_api.binaries'.
-            bins = getImports(hook_api.__file__)
+            bins = get_imports(hook_api.__file__)
             # Reformat data structure from
             #     set(['lib1', 'lib2', 'lib3'])
             # to

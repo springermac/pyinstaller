@@ -46,9 +46,9 @@ class PyInstallerGUI:
         fr4 = Frame(root, width=300, height=100)
         fr4.pack(side="bottom", pady=10)
 
-        getFileButton = Button(fr1, text="Script to bundle ...")
-        getFileButton.bind("<Button>", self.GetFile)
-        getFileButton.pack(side="left")
+        get_file_button = Button(fr1, text="Script to bundle ...")
+        get_file_button.bind("<Button>", self.get_file)
+        get_file_button.pack(side="left")
         self.filein = Entry(fr1)
         self.filein.pack(side="right")
         self.filetype = self.make_checkbutton(fr2, "One File Package")
@@ -64,7 +64,7 @@ class PyInstallerGUI:
             self.strip = IntVar()
 
         okaybutton = Button(fr4, text="Okay   ")
-        okaybutton.bind("<Button>", self.makePackage)
+        okaybutton.bind("<Button>", self.make_package)
         okaybutton.pack(side="left")
 
         cancelbutton = Button(fr4, text="Cancel")
@@ -83,7 +83,7 @@ class PyInstallerGUI:
     def killapp(self, event):
         sys.exit(0)
 
-    def makePackage(self, event):
+    def make_package(self, event):
         commands = [sys.executable, 'pyinstaller.py']
         if self.filetype.get():
             commands.append('--onefile')
@@ -99,7 +99,7 @@ class PyInstallerGUI:
         retcode = subprocess.call(commands)
         sys.exit(retcode)
 
-    def GetFile(self, event):
+    def get_file(self, event):
         self.fin = filedialog.askopenfilename()
         self.filein.delete(0, 'end')
         self.filein.insert(0, self.fin)

@@ -28,7 +28,7 @@ def run():
     exe_file = os.path.abspath(args.exe_file)
 
     try:
-        vs = PyInstaller.utils.win32.versioninfo.SetVersion(exe_file, info_file)
+        vs = PyInstaller.utils.win32.versioninfo.set_version(exe_file, info_file)
         print(('Version info set in: %s' % exe_file))
     except KeyboardInterrupt:
         raise SystemExit("Aborted by user request.")

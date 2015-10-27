@@ -65,7 +65,7 @@ _PARAMETERS = (
 )
 
 @pytest.mark.parametrize("prefix,excludes,result", _PARAMETERS)
-def test_Tree(monkeypatch, prefix, excludes, result):
+def test_tree(monkeypatch, prefix, excludes, result):
     monkeypatch.setattr('PyInstaller.config.CONF', {'workpath': '.'})
     tree = Tree(_DATA_BASEPATH, prefix=prefix, excludes=excludes)
     files = sorted(f[0] for f in tree)

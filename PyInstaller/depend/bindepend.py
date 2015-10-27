@@ -40,7 +40,7 @@ seen = set()
 # Import windows specific stuff.
 if is_win:
     from ..utils.win32.winmanifest import RT_MANIFEST
-    from ..utils.win32.winmanifest import GetManifestResources
+    from ..utils.win32.winmanifest import get_manifest_resources
     from ..utils.win32.winmanifest import Manifest
     from ..utils.win32 import winresource
 
@@ -78,17 +78,17 @@ def getfullnameof(mod, xtrapath=None):
             epath = xtrapath + epath
     for p in epath:
         npth = os.path.join(p, mod)
-        if os.path.exists(npth) and matchDLLArch(npth):
+        if os.path.exists(npth) and match_dll_arch(npth):
             return npth
         # second try: lower case filename
         for p in epath:
             npth = os.path.join(p, mod.lower())
-            if os.path.exists(npth) and matchDLLArch(npth):
+            if os.path.exists(npth) and match_dll_arch(npth):
                 return npth
     return ''
 
 
-def _getImports_pe(pth):
+def _get_imports_pe(pth):
     """
     Find the binary dependencies of PTH.
 
@@ -163,7 +163,8 @@ def match_binding_redirect(manifest, redirect):
 
 _exe_machine_type = None
 
-def matchDLLArch(filename):
+
+def match_dll_arch(filename):
     """
     Return True if the DLL given by filename matches the CPU type/architecture of the
     Python process running PyInstaller.
@@ -190,7 +191,8 @@ def matchDLLArch(filename):
 
     return pe.FILE_HEADER.Machine == _exe_machine_type
 
-def Dependencies(lTOC, xtrapath=None, manifest=None, redirects=None):
+
+def dependencies(ltoc, xtrapath=None, manifest=None, redirects=None):
     """
     Expand LTOC to include all the closure of binary dependencies.
 
@@ -207,23 +209,23 @@ def Dependencies(lTOC, xtrapath=None, manifest=None, redirects=None):
     """
     # Extract all necessary binary modules from Python eggs to be included
     # directly with PyInstaller.
-    lTOC = _extract_from_egg(lTOC)
+    ltoc = _extract_from_egg(ltoc)
 
-    for nm, pth, typ in lTOC:
+    for nm, pth, typ in ltoc:
         if nm.upper() in seen:
             continue
         logger.debug("Analyzing %s", pth)
         seen.add(nm.upper())
         if is_win:
-            for ftocnm, fn in getAssemblyFiles(pth, manifest, redirects):
-                lTOC.append((ftocnm, fn, 'BINARY'))
-        for lib, npth in selectImports(pth, xtrapath):
+            for ftocnm, fn in get_assembly_files(pth, manifest, redirects):
+                ltoc.append((ftocnm, fn, 'BINARY'))
+        for lib, npth in select_imports(pth, xtrapath):
             if lib.upper() in seen or npth.upper() in seen:
                 continue
             seen.add(npth.upper())
-            lTOC.append((lib, npth, 'BINARY'))
+            ltoc.append((lib, npth, 'BINARY'))
 
-    return lTOC
+    return ltoc
 
 
 def pkg_resources_get_default_cache():
@@ -322,7 +324,7 @@ def check_extract_from_egg(pth, todir=None):
     return [(pth, None, None)]
 
 
-def getAssemblies(pth):
+def get_assemblies(pth):
     """
     On Windows return the dependent Side-by-Side (SxS) assemblies of a binary as a
     list of Manifest objects.
@@ -344,7 +346,7 @@ def getAssemblies(pth):
     else:
         # check the binary for embedded manifest
         try:
-            res = GetManifestResources(pth)
+            res = get_manifest_resources(pth)
         except winresource.pywintypes.error as exc:
             if exc.args[0] == winresource.ERROR_BAD_EXE_FORMAT:
                 logger.info('Cannot get manifest resource from non-PE '
@@ -375,7 +377,7 @@ def getAssemblies(pth):
     return rv
 
 
-def getAssemblyFiles(pth, manifest=None, redirects=None):
+def get_assembly_files(pth, manifest=None, redirects=None):
     """
     Find all assemblies that are dependencies of the given binary and return the files
     that make up the assemblies as (name, fullpath) tuples.
@@ -393,7 +395,7 @@ def getAssemblyFiles(pth, manifest=None, redirects=None):
     rv = []
     if manifest:
         _depNames = set(dep.name for dep in manifest.dependentAssemblies)
-    for assembly in getAssemblies(pth):
+    for assembly in get_assemblies(pth):
         if assembly.getid().upper() in seen:
             continue
         if manifest and assembly.name not in _depNames:
@@ -478,7 +480,7 @@ def getAssemblyFiles(pth, manifest=None, redirects=None):
     return rv
 
 
-def selectImports(pth, xtrapath=None):
+def select_imports(pth, xtrapath=None):
     """
     Return the dependencies of a binary that should be included.
 
@@ -490,7 +492,7 @@ def selectImports(pth, xtrapath=None):
     else:
         assert isinstance(xtrapath, list)
         xtrapath = [os.path.dirname(pth)] + xtrapath  # make a copy
-    dlls = getImports(pth)
+    dlls = get_imports(pth)
     for lib in dlls:
         if lib.upper() in seen:
             continue
@@ -531,7 +533,7 @@ def selectImports(pth, xtrapath=None):
     return rv
 
 
-def _getImports_ldd(pth):
+def _get_imports_ldd(pth):
     """
     Find the binary dependencies of PTH.
 
@@ -544,19 +546,19 @@ def _getImports_ldd(pth):
         # or
         #   'sharedlib.so'
         # Will not match the fake lib '/unix'
-        lddPattern = re.compile(r"^\s*(((?P<libarchive>(.*\.a))(?P<objectmember>\(.*\)))|((?P<libshared>(.*\.so))))$")
+        ldd_pattern = re.compile(r"^\s*(((?P<libarchive>(.*\.a))(?P<objectmember>\(.*\)))|((?P<libshared>(.*\.so))))$")
     elif is_solar:
         # Match libs of the form
         #   'sharedlib.so => full-path-to-lib
         # e.g.
         #   'libpython2.7.so.1.0 => /usr/local/lib/libpython2.7.so.1.0'
         # Will not match the platform specific libs starting with '/platform'
-        lddPattern = re.compile(r"^\s+(.*)\s+=>\s+(.*)$")
+        ldd_pattern = re.compile(r"^\s+(.*)\s+=>\s+(.*)$")
     else:
-        lddPattern = re.compile(r"\s*(.*?)\s+=>\s+(.*?)\s+\(.*\)")
+        ldd_pattern = re.compile(r"\s*(.*?)\s+=>\s+(.*?)\s+\(.*\)")
 
     for line in compat.exec_command('ldd', pth).splitlines():
-        m = lddPattern.search(line)
+        m = ldd_pattern.search(line)
         if m:
             if is_aix:
                 libarchive = m.group('libarchive')
@@ -589,7 +591,7 @@ def _getImports_ldd(pth):
     return rslt
 
 
-def _getImports_macholib(pth):
+def _get_imports_macholib(pth):
     """
     Find the binary dependencies of PTH.
 
@@ -688,15 +690,15 @@ def _getImports_macholib(pth):
     return rslt
 
 
-def getImports(pth):
+def get_imports(pth):
     """
-    Forwards to the correct getImports implementation for the platform.
+    Forwards to the correct get_imports implementation for the platform.
     """
     if is_win or is_cygwin:
         if pth.lower().endswith(".manifest"):
             return []
         try:
-            return _getImports_pe(pth)
+            return _get_imports_pe(pth)
         except Exception as exception:
             # Assemblies can pull in files which aren't necessarily PE,
             # but are still needed by the assembly. Any additional binary
@@ -706,12 +708,12 @@ def getImports(pth):
             logger.warn('Can not get binary dependencies for file: %s', pth, exc_info=1)
             return []
     elif is_darwin:
-        return _getImports_macholib(pth)
+        return _get_imports_macholib(pth)
     else:
-        return _getImports_ldd(pth)
+        return _get_imports_ldd(pth)
 
 
-def findLibrary(name):
+def find_fibrary(name):
     """
     Look for a library in the system.
 
@@ -833,7 +835,7 @@ def get_python_library_path():
     """
     # Try to get Python library name from the Python executable. It assumes that Python
     # library is not statically linked.
-    dlls = getImports(sys.executable)
+    dlls = get_imports(sys.executable)
     for filename in dlls:
         for name in PYDYLIB_NAMES:
             if os.path.basename(filename) == name:
@@ -849,7 +851,7 @@ def get_python_library_path():
 
     if is_unix:
         for name in PYDYLIB_NAMES:
-            python_libname = findLibrary(name)
+            python_libname = find_fibrary(name)
             if python_libname:
                 return python_libname
 

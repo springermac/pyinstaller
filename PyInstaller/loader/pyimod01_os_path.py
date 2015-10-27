@@ -85,7 +85,7 @@ if sys.platform.startswith('win'):
         # set i to index beyond p's last slash
         i = len(p)
         while i and p[i - 1] not in '/\\':
-            i = i - 1
+            i -= 1
         head, tail = p[:i], p[i:]  # now tail has no slashes
         # Windows implementation is based on split(). We need
         # to return only tail.

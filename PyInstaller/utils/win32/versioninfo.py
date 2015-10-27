@@ -100,7 +100,7 @@ LOAD_LIBRARY_AS_DATAFILE = 2
 STRINGTYPE = type(u'')
 
 
-def getRaw(o):
+def get_raw(o):
     return str(buffer(o))
 
 
@@ -109,7 +109,7 @@ def decode(pathnm):
     nm = win32api.EnumResourceNames(h, RESOURCE_TYPE['RT_VERSION'])[0]
     data = win32api.LoadResource(h, RESOURCE_TYPE['RT_VERSION'], nm)
     vs = VSVersionInfo()
-    j = vs.fromRaw(data)
+    j = vs.from_raw(data)
     win32api.FreeLibrary(h)
     return vs
 
@@ -132,34 +132,34 @@ class VSVersionInfo:
         self.ffi = ffi
         self.kids = kids or []
 
-    def fromRaw(self, data):
-        i, (sublen, vallen, wType, nm) = parseCommon(data)
-        #vallen is length of the ffi, typ is 0, nm is 'VS_VERSION_INFO'.
+    def from_raw(self, data):
+        i, (sublen, vallen, w_type, nm) = parse_common(data)
+        # vallen is length of the ffi, typ is 0, nm is 'VS_VERSION_INFO'.
         i = ((i + 3) / 4) * 4
         # Now a VS_FIXEDFILEINFO
         self.ffi = FixedFileInfo()
-        j = self.ffi.fromRaw(data, i)
+        j = self.ffi.from_raw(data, i)
         i = j
         while i < sublen:
             j = i
-            i, (csublen, cvallen, ctyp, nm) = parseCommon(data, i)
+            i, (csublen, cvallen, ctyp, nm) = parse_common(data, i)
             if unicode(nm).strip() == u'StringFileInfo':
                 sfi = StringFileInfo()
-                k = sfi.fromRaw(csublen, cvallen, nm, data, i, j+csublen)
+                k = sfi.from_raw(csublen, cvallen, nm, data, i, j+csublen)
                 self.kids.append(sfi)
                 i = k
             else:
                 vfi = VarFileInfo()
-                k = vfi.fromRaw(csublen, cvallen, nm, data, i, j+csublen)
+                k = vfi.from_raw(csublen, cvallen, nm, data, i, j+csublen)
                 self.kids.append(vfi)
                 i = k
             i = j + csublen
             i = ((i + 3) / 4) * 4
         return i
 
-    def toRaw(self):
+    def to_raw(self):
         nm = pywintypes.Unicode(u'VS_VERSION_INFO')
-        rawffi = self.ffi.toRaw()
+        rawffi = self.ffi.to_raw()
         vallen = len(rawffi)
         typ = 0
         sublen = 6 + 2*len(nm) + 2
@@ -170,10 +170,10 @@ class VSVersionInfo:
         pad2 = ''
         if sublen % 4:
             pad2 = '\000\000'
-        tmp = "".join([kid.toRaw() for kid in self.kids ])
+        tmp = "".join([kid.to_raw() for kid in self.kids])
         sublen = sublen + len(pad2) + len(tmp)
-        return (struct.pack('hhh', sublen, vallen, typ)
-                + getRaw(nm) + '\000\000' + pad + rawffi + pad2 + tmp)
+        return (struct.pack('hhh', sublen, vallen, typ) +
+                get_raw(nm) + '\000\000' + pad + rawffi + pad2 + tmp)
 
     def __unicode__(self, indent=u''):
         indent = indent + u'  '
@@ -193,13 +193,14 @@ VSVersionInfo(
 """ % (indent, self.ffi.__unicode__(indent), indent, tmp, indent))
 
 
-def parseCommon(data, start=0):
+def parse_common(data, start=0):
     i = start + 6
-    (wLength, wValueLength, wType) = struct.unpack('3h', data[start:i])
-    i, text = parseUString(data, i, i+wLength)
-    return i, (wLength, wValueLength, wType, text)
+    (w_length, w_value_length, w_type) = struct.unpack('3h', data[start:i])
+    i, text = parse_u_string(data, i, i+w_length)
+    return i, (w_length, w_value_length, w_type, text)
 
-def parseUString(data, start, limit):
+
+def parse_u_string(data, start, limit):
     i = start
     while i < limit:
         if data[i:i+2] == '\000\000':
@@ -235,7 +236,7 @@ class FixedFileInfo:
     DWORD dwFileDateLS;
     """
     def __init__(self, filevers=(0, 0, 0, 0), prodvers=(0, 0, 0, 0),
-                 mask=0x3f, flags=0x0, OS=0x40004, fileType=0x1,
+                 mask=0x3f, flags=0x0, os=0x40004, file_type=0x1,
                  subtype=0x0, date=(0, 0)):
         self.sig = 0xfeef04bd
         self.strucVersion = 0x10000
@@ -245,13 +246,13 @@ class FixedFileInfo:
         self.productVersionLS = (prodvers[2] << 16) | (prodvers[3] & 0xffff)
         self.fileFlagsMask = mask
         self.fileFlags = flags
-        self.fileOS = OS
-        self.fileType = fileType
+        self.fileOS = os
+        self.fileType = file_type
         self.fileSubtype = subtype
         self.fileDateMS = date[0]
         self.fileDateLS = date[1]
 
-    def fromRaw(self, data, i):
+    def from_raw(self, data, i):
         (self.sig,
          self.strucVersion,
          self.fileVersionMS,
@@ -267,7 +268,7 @@ class FixedFileInfo:
          self.fileDateLS) = struct.unpack('13l', data[i:i+52])
         return i+52
 
-    def toRaw(self):
+    def to_raw(self):
         return struct.pack('L12l', self.sig,
                              self.strucVersion,
                              self.fileVersionMS,
@@ -327,16 +328,16 @@ class StringFileInfo(object):
         self.name = u'StringFileInfo'
         self.kids = kids or []
 
-    def fromRaw(self, sublen, vallen, name, data, i, limit):
+    def from_raw(self, sublen, vallen, name, data, i, limit):
         self.name = name
         while i < limit:
             st = StringTable()
-            j = st.fromRaw(data, i, limit)
+            j = st.from_raw(data, i, limit)
             self.kids.append(st)
             i = j
         return i
 
-    def toRaw(self):
+    def to_raw(self):
         if type(self.name) is STRINGTYPE:
             self.name = pywintypes.Unicode(self.name)
         vallen = 0
@@ -345,12 +346,12 @@ class StringFileInfo(object):
         pad = ''
         if sublen % 4:
             pad = '\000\000'
-        tmp = ''.join([kid.toRaw() for kid in self.kids])
+        tmp = ''.join([kid.to_raw() for kid in self.kids])
         sublen = sublen + len(pad) + len(tmp)
         if tmp[-2:] == '\000\000':
-            sublen = sublen - 2
-        return (struct.pack('hhh', sublen, vallen, typ)
-                + getRaw(self.name) + '\000\000' + pad + tmp)
+            sublen -= 2
+        return (struct.pack('hhh', sublen, vallen, typ) +
+                get_raw(self.name) + '\000\000' + pad + tmp)
 
     def __unicode__(self, indent=u''):
         newindent = indent + u'  '
@@ -373,18 +374,18 @@ class StringTable:
         self.name = name or u''
         self.kids = kids or []
 
-    def fromRaw(self, data, i, limit):
-        i, (cpsublen, cpwValueLength, cpwType, self.name) = parseCodePage(data, i, limit) # should be code page junk
-        #i = ((i + 3) / 4) * 4
+    def from_raw(self, data, i, limit):
+        i, (cpsublen, cpw_value_length, cpw_type, self.name) = parse_code_page(data, i, limit)  # should be code page junk
+        # i = ((i + 3) / 4) * 4
         while i < limit:
             ss = StringStruct()
-            j = ss.fromRaw(data, i, limit)
+            j = ss.from_raw(data, i, limit)
             i = j
             self.kids.append(ss)
             i = ((i + 3) / 4) * 4
         return i
 
-    def toRaw(self):
+    def to_raw(self):
         if type(self.name) is STRINGTYPE:
             self.name = pywintypes.Unicode(self.name)
         vallen = 0
@@ -392,7 +393,7 @@ class StringTable:
         sublen = 6 + 2*len(self.name) + 2
         tmp = []
         for kid in self.kids:
-            raw = kid.toRaw()
+            raw = kid.to_raw()
             if len(raw) % 4:
                 raw = raw + '\000\000'
             tmp.append(raw)
@@ -400,8 +401,8 @@ class StringTable:
         sublen += len(tmp)
         if tmp[-2:] == '\000\000':
             sublen -= 2
-        return (struct.pack('hhh', sublen, vallen, typ)
-                + getRaw(self.name) + '\000\000' + tmp)
+        return (struct.pack('hhh', sublen, vallen, typ) +
+                get_raw(self.name) + '\000\000' + tmp)
 
     def __unicode__(self, indent=u''):
         newindent = indent + u'  '
@@ -424,14 +425,14 @@ class StringStruct:
         self.name = name or u''
         self.val = val or u''
 
-    def fromRaw(self, data, i, limit):
-        i, (sublen, vallen, typ, self.name) = parseCommon(data, i)
+    def from_raw(self, data, i, limit):
+        i, (sublen, vallen, typ, self.name) = parse_common(data, i)
         limit = i + sublen
         i = ((i + 3) / 4) * 4
-        i, self.val = parseUString(data, i, limit)
+        i, self.val = parse_u_string(data, i, limit)
         return i
 
-    def toRaw(self):
+    def to_raw(self):
         if type(self.name) is STRINGTYPE:
             # Convert unicode object to byte string.
             raw_name = self.name.encode('UTF-16LE')
@@ -455,9 +456,9 @@ class StringStruct:
         return u"StringStruct(u'%s', u'%s')" % (self.name, self.val) 
 
 
-def parseCodePage(data, i, limit):
-    i, (sublen, wValueLength, wType, nm) = parseCommon(data, i)
-    return i, (sublen, wValueLength, wType, nm)
+def parse_code_page(data, i, limit):
+    i, (sublen, w_value_length, w_type, nm) = parse_common(data, i)
+    return i, (sublen, w_value_length, w_type, nm)
 
 
 class VarFileInfo:
@@ -473,19 +474,19 @@ class VarFileInfo:
     def __init__(self, kids=None):
         self.kids = kids or []
 
-    def fromRaw(self, sublen, vallen, name, data, i, limit):
+    def from_raw(self, sublen, vallen, name, data, i, limit):
         self.sublen = sublen
         self.vallen = vallen
         self.name = name
         i = ((i + 3) / 4) * 4
         while i < limit:
             vs = VarStruct()
-            j = vs.fromRaw(data, i, limit)
+            j = vs.from_raw(data, i, limit)
             self.kids.append(vs)
             i = j
         return i
 
-    def toRaw(self):
+    def to_raw(self):
         self.vallen = 0
         self.wType = 1
         self.name = pywintypes.Unicode('VarFileInfo')
@@ -493,10 +494,10 @@ class VarFileInfo:
         pad = ''
         if sublen % 4:
             pad = '\000\000'
-        tmp = ''.join([kid.toRaw() for kid in self.kids])
+        tmp = ''.join([kid.to_raw() for kid in self.kids])
         self.sublen = sublen + len(pad) + len(tmp)
-        return (struct.pack('hhh', self.sublen, self.vallen, self.wType)
-                + getRaw(self.name) + '\000\000' + pad + tmp)
+        return (struct.pack('hhh', self.sublen, self.vallen, self.wType) +
+                get_raw(self.name) + '\000\000' + pad + tmp)
 
     def __unicode__(self, indent=''):
         tmp = map(unicode, self.kids)
@@ -519,34 +520,34 @@ class VarStruct:
         self.name = name or u''
         self.kids = kids or []
 
-    def fromRaw(self, data, i, limit):
-        i, (self.sublen, self.wValueLength, self.wType, self.name) = parseCommon(data, i)
+    def from_raw(self, data, i, limit):
+        i, (self.sublen, self.w_value_length, self.w_type, self.name) = parse_common(data, i)
         i = ((i + 3) / 4) * 4
-        for j in range(self.wValueLength/2):
+        for j in range(self.w_value_length/2):
             kid = struct.unpack('h', data[i:i+2])[0]
             self.kids.append(kid)
             i += 2
         return i
 
-    def toRaw(self):
-        self.wValueLength = len(self.kids) * 2
-        self.wType = 0
+    def to_raw(self):
+        self.w_value_length = len(self.kids) * 2
+        self.w_type = 0
         if type(self.name) is STRINGTYPE:
             self.name = pywintypes.Unicode(self.name)
         sublen = 6 + 2*len(self.name) + 2
         pad = ''
         if sublen % 4:
             pad = '\000\000'
-        self.sublen = sublen + len(pad) + self.wValueLength
+        self.sublen = sublen + len(pad) + self.w_value_length
         tmp = ''.join([struct.pack('h', kid) for kid in self.kids])
-        return (struct.pack('hhh', self.sublen, self.wValueLength, self.wType)
-                + getRaw(self.name) + '\000\000' + pad + tmp)
+        return (struct.pack('hhh', self.sublen, self.w_value_length, self.w_type) +
+                get_raw(self.name) + '\000\000' + pad + tmp)
 
     def __unicode__(self, indent=u''):
         return u"VarStruct(u'%s', %r)" % (self.name, self.kids)
 
 
-def SetVersion(exenm, versionfile):
+def set_version(exenm, versionfile):
     if isinstance(versionfile, VSVersionInfo):
         vs = versionfile
     else:
@@ -555,5 +556,5 @@ def SetVersion(exenm, versionfile):
         fp.close()
         vs = eval(txt)
     hdst = win32api.BeginUpdateResource(exenm, 0)
-    win32api.UpdateResource(hdst, RESOURCE_TYPE['RT_VERSION'], 1, vs.toRaw())
-    win32api.EndUpdateResource (hdst, 0)
+    win32api.UpdateResource(hdst, RESOURCE_TYPE['RT_VERSION'], 1, vs.to_raw())
+    win32api.EndUpdateResource(hdst, 0)

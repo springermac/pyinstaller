@@ -351,7 +351,7 @@ class Analysis(Target):
             # Windows: Create a manifest to embed into built .exe, containing the same
             # dependencies as python.exe.
             depmanifest = winmanifest.Manifest(type_="win32", name=CONF['specnm'],
-                                               processorArchitecture=winmanifest.processor_architecture(),
+                                               processor_architecture=winmanifest.processor_architecture(),
                                                version=(1, 0, 0, 0))
             depmanifest.filename = os.path.join(CONF['workpath'],
                                                 CONF['specnm'] + ".exe.manifest")
@@ -369,7 +369,7 @@ class Analysis(Target):
         # This also ensures that its assembly depencies under Windows get added to the
         # built .exe's manifest. Python 2.7 extension modules have no assembly
         # dependencies, and rely on the app-global dependencies set by the .exe.
-        self.binaries.extend(bindepend.Dependencies([('', python, '')],
+        self.binaries.extend(bindepend.dependencies([('', python, '')],
                                                     manifest=depmanifest,
                                                     redirects=self.binding_redirects)[1:])
         if is_win:
@@ -530,7 +530,7 @@ class Analysis(Target):
         # Add remaining binary dependencies - analyze Python C-extensions and what
         # DLLs they depend on.
         logger.info('Looking for dynamic libraries')
-        self.binaries.extend(bindepend.Dependencies(self.binaries,
+        self.binaries.extend(bindepend.dependencies(self.binaries,
                                                     redirects=self.binding_redirects))
 
         ### Include zipped Python eggs.

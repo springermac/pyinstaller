@@ -171,7 +171,7 @@ def scan_code_for_ctypes(co):
             # TODO make these warnings show up somewhere.
             logger.warn("ignoring %s - ctypes imports only supported using bare filenames", binary)
 
-    binaries = _resolveCtypesImports(binaries)
+    binaries = _resolve_ctypes_imports(binaries)
     return binaries
 
 
@@ -202,7 +202,7 @@ def __scan_code_instruction_for_ctypes(co, instructions):
     dependencies, the other containing warnings.
     """
 
-    def _libFromConst():
+    def _lib_from_const():
         """Extracts library name from an expected LOAD_CONST instruction and
         appends it to local binaries list.
         """
@@ -240,7 +240,7 @@ def __scan_code_instruction_for_ctypes(co, instructions):
         #
         #   LOAD_GLOBAL 0 (CDLL) <--- we "are" here right now
         #   LOAD_CONST 1 ('library.so')
-        return _libFromConst()
+        return _lib_from_const()
 
     elif name in ("cdll", "windll", "oledll", "pydll"):
         # Guesses ctypes imports of these types:
@@ -259,7 +259,7 @@ def __scan_code_instruction_for_ctypes(co, instructions):
         if op == LOAD_ATTR:
             if co.co_names[oparg] == "LoadLibrary":
                 # Second type, needs to fetch one more instruction
-                return _libFromConst()
+                return _lib_from_const()
             else:
                 # First type
                 return co.co_names[oparg] + ".dll"
@@ -282,7 +282,7 @@ def __scan_code_instruction_for_ctypes(co, instructions):
 
 
 # TODO Reuse this code with modulegraph implementation
-def _resolveCtypesImports(cbinaries):
+def _resolve_ctypes_imports(cbinaries):
     """
     Completes ctypes BINARY entries for modules with their full path.
 
@@ -295,7 +295,7 @@ def _resolveCtypesImports(cbinaries):
     so shared libs will be search there, too.
 
     Example:
-    >>> _resolveCtypesImports(['libgs.so'])
+    >>> _resolve_ctypes_imports(['libgs.so'])
     [(libgs.so', ''/usr/lib/libgs.so', 'BINARY')]
 
     """
@@ -309,7 +309,7 @@ def _resolveCtypesImports(cbinaries):
     else:
         envvar = "PATH"
 
-    def _setPaths():
+    def _set_paths():
         path = os.pathsep.join(CONF['pathex'])
         old = compat.getenv(envvar)
         if old is not None:
@@ -317,7 +317,7 @@ def _resolveCtypesImports(cbinaries):
         compat.setenv(envvar, path)
         return old
 
-    def _restorePaths(old):
+    def _restore_paths(old):
         if old is None:
             compat.unsetenv(envvar)
         else:
@@ -328,7 +328,7 @@ def _resolveCtypesImports(cbinaries):
     # Try to locate the shared library on disk. This is done by
     # executing ctypes.utile.find_library prepending ImportTracker's
     # local paths to library search paths, then replaces original values.
-    old = _setPaths()
+    old = _set_paths()
     for cbin in cbinaries:
         cpath = find_library(os.path.splitext(cbin)[0])
         if is_unix:
@@ -364,7 +364,7 @@ def _resolveCtypesImports(cbinaries):
             if not include_library(cpath):
                 continue
             ret.append((cbin, cpath, "BINARY"))
-    _restorePaths(old)
+    _restore_paths(old)
     return ret
 
 
@@ -446,7 +446,7 @@ def get_path_to_egg(path):
     # TODO add support for unpacked eggs and for new .whl packages.
     lastpath = None  # marker to stop recursion
     while path and path != lastpath:
-        if os.path.splitext(path)[1].lower() == (".egg"):
+        if os.path.splitext(path)[1].lower() == ".egg":
             if os.path.isfile(path) or os.path.isdir(path):
                 return path
         lastpath = path

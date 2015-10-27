@@ -43,9 +43,9 @@ def run():
     try:
         for a in args.filenames:
             for fn in glob.glob(a):
-                imports = PyInstaller.depend.bindepend.getImports(fn)
+                imports = PyInstaller.depend.bindepend.get_imports(fn)
                 if is_win:
-                    assemblies = PyInstaller.depend.bindepend.getAssemblies(fn)
+                    assemblies = PyInstaller.depend.bindepend.get_assemblies(fn)
                     imports.update([a.getid() for a in assemblies])
                 print(fn, imports)
     except KeyboardInterrupt:

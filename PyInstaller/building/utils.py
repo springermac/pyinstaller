@@ -263,7 +263,7 @@ def check_cache(fnm, strip=False, upx=False, dist_nm=None):
         # When shared assemblies are bundled into the app, they may optionally be
         # changed into private assemblies.
         try:
-            res = winmanifest.GetManifestResources(os.path.abspath(cachedfile))
+            res = winmanifest.get_manifest_resources(os.path.abspath(cachedfile))
         except winresource.pywintypes.error as e:
             if e.args[0] == winresource.ERROR_BAD_EXE_FORMAT:
                 # Not a win32 PE file

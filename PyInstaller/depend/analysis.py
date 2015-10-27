@@ -274,7 +274,7 @@ class PyiModuleGraph(ModuleGraph):
                     code_dict[node.identifier] = node.code
         return code_dict
 
-    def _make_toc(self, typecode=None, existing_TOC=None):
+    def _make_toc(self, typecode=None, existing_toc=None):
         """
         Return the name, path and type of selected nodes as a TOC, or appended
         to a TOC. The selection is via a list of PyInstaller TOC typecodes.
@@ -295,7 +295,7 @@ class PyiModuleGraph(ModuleGraph):
         regex_str = '(' + '|'.join(PY3_BASE_MODULES) + r')(\.|$)'
         module_filter = re.compile(regex_str)
 
-        result = existing_TOC or TOC()
+        result = existing_toc or TOC()
         for node in self.flatten(start=self._top_script_node):
             # TODO This is terrible. Everything in Python has a type. It's
             # nonsensical to even speak of "nodes [that] are not typed." How
@@ -354,7 +354,7 @@ class PyiModuleGraph(ModuleGraph):
         """
         return self._make_toc(BAD_MODULE_TYPES)
 
-    def nodes_to_toc(self, node_list, existing_TOC=None):
+    def nodes_to_toc(self, node_list, existing_toc=None):
         """
         Given a list of nodes, create a TOC representing those nodes.
         This is mainly used to initialize a TOC of scripts with the
@@ -362,7 +362,7 @@ class PyiModuleGraph(ModuleGraph):
         _make_toc(), but the caller guarantees the nodes are
         valid, so minimal checking.
         """
-        result = existing_TOC or TOC()
+        result = existing_toc or TOC()
         for node in node_list:
             mg_type = type(node).__name__
             toc_type = MODULE_TYPES_TO_TOC_DICT[mg_type]

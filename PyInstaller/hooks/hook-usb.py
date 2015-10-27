@@ -11,7 +11,7 @@
 import ctypes.util
 import os
 
-from PyInstaller.depend.utils import _resolveCtypesImports
+from PyInstaller.depend.utils import _resolve_ctypes_imports
 from PyInstaller.compat import is_cygwin
 
 
@@ -42,14 +42,14 @@ if libname is not None:
     # Use basename here because Python returns full library path
     # on Mac OSX when using ctypes.util.find_library.
     bins = [os.path.basename(libname)]
-    binaries = _resolveCtypesImports(bins)
+    binaries = _resolve_ctypes_imports(bins)
 elif is_cygwin:
     bins = ['cygusb-1.0-0.dll', 'cygusb0.dll']
-    binaries = _resolveCtypesImports(bins)[:1]  # use only the first one if any
+    binaries = _resolve_ctypes_imports(bins)[:1]  # use only the first one if any
 else:
     binaries = []
 if binaries:
-    # `_resolveCtypesImports` returns a 3-tuple, but `binaries` are only
+    # `_resolve_ctypes_imports` returns a 3-tuple, but `binaries` are only
     # 2-tuples, so remove the last element:
     assert len(binaries[0]) == 3
     binaries = [reversed(binaries[0][:2])]
