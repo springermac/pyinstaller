@@ -867,10 +867,10 @@ class Manifest(object):
                 br_e = doc.cE("bindingRedirect")
                 br_e.setAttribute("oldVersion",
                                   "-".join([".".join([str(i)
-                                                     for i in
-                                                     part])
-                                           for part in
-                                           bindingRedirect[0]]))
+                                                      for i in
+                                                      part])
+                                            for part in
+                                            bindingRedirect[0]]))
                 br_e.setAttribute("newVersion",
                                   ".".join([str(i) for i in bindingRedirect[1]]))
                 docE.aChild(br_e)

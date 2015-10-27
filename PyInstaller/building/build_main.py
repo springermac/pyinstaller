@@ -224,31 +224,31 @@ class Analysis(Target):
                 self.binaries.append((name, pth, 'DATA'))
 
     _GUTS = (
-            # input parameters
-            ('inputs', _check_guts_eq),  # parameter `scripts`
-            ('pathex', _check_guts_eq),
-            ('hiddenimports', _check_guts_eq),
-            ('hookspath', _check_guts_eq),
-            ('excludes', _check_guts_eq),
-            ('custom_runtime_hooks', _check_guts_eq),
-            ('win_no_prefer_redirects', _check_guts_eq),
-            ('win_private_assemblies', _check_guts_eq),
+        # input parameters
+        ('inputs', _check_guts_eq),  # parameter `scripts`
+        ('pathex', _check_guts_eq),
+        ('hiddenimports', _check_guts_eq),
+        ('hookspath', _check_guts_eq),
+        ('excludes', _check_guts_eq),
+        ('custom_runtime_hooks', _check_guts_eq),
+        ('win_no_prefer_redirects', _check_guts_eq),
+        ('win_private_assemblies', _check_guts_eq),
 
-            # 'cipher': no need to check as it is implied by an
-            # additional hidden import
+        # 'cipher': no need to check as it is implied by an
+        # additional hidden import
 
-            # calculated/analysed values
-            ('scripts', _check_guts_toc_mtime),
-            ('pure', lambda *args: _check_guts_toc_mtime(*args, **{'pyc': 1})),
-            ('binaries', _check_guts_toc_mtime),
-            ('zipfiles', _check_guts_toc_mtime),
-            ('zipped_data', None),  # TODO check this, too
-            ('datas', _check_guts_toc_mtime),
-            # TODO: Need to add "dependencies"?
+        # calculated/analysed values
+        ('scripts', _check_guts_toc_mtime),
+        ('pure', lambda *args: _check_guts_toc_mtime(*args, **{'pyc': 1})),
+        ('binaries', _check_guts_toc_mtime),
+        ('zipfiles', _check_guts_toc_mtime),
+        ('zipped_data', None),  # TODO check this, too
+        ('datas', _check_guts_toc_mtime),
+        # TODO: Need to add "dependencies"?
 
-            # cached binding redirects - loaded into CONF for PYZ/COLLECT to find.
-            ('binding_redirects', None),
-            )
+        # cached binding redirects - loaded into CONF for PYZ/COLLECT to find.
+        ('binding_redirects', None),
+    )
 
     def _extend_pathex(self, spec_pathex, scripts):
         """
