@@ -68,7 +68,7 @@ def _old_api_error(obj_name):
 
 
 # TODO find better place for function.
-def setupUPXFlags():
+def setup_upx_flags():
     f = compat.getenv("UPX", "")
     if is_win:
         # Binaries built with Visual Studio 7.1 require --strip-loadconf
@@ -779,7 +779,7 @@ def main(pyi_config, specfile, noconfirm, ascii=False, **kw):
         CONF.update(pyi_config)
 
     if CONF['hasUPX']:
-        setupUPXFlags()
+        setup_upx_flags()
 
     CONF['ui_admin'] = kw.get('ui_admin', False)
     CONF['ui_access'] = kw.get('ui_uiaccess', False)

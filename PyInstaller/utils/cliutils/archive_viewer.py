@@ -129,7 +129,7 @@ def get_archive(name):
         return CArchiveReader(name)
     parent = stack[-1][1]
     try:
-        return parent.openEmbedded(name)
+        return parent.open_embedded(name)
     except KeyError:
         return None
     except (ValueError, RuntimeError):

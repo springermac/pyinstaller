@@ -216,7 +216,7 @@ class CArchiveReader(ArchiveReader):
             rslt.append(nm)
         return rslt
 
-    def openEmbedded(self, name):
+    def open_embedded(self, name):
         """
         Open a CArchive of name NAME embedded within this CArchive.
 

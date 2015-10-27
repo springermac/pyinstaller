@@ -23,12 +23,12 @@ from operator import itemgetter
 from PyInstaller import is_win, is_darwin, is_linux, HOMEPATH, PLATFORM
 from PyInstaller.archive.writers import ZlibArchiveWriter, CArchiveWriter
 from PyInstaller.building.utils import _check_guts_toc, add_suffix_to_extensions, \
-    checkCache, _check_path_overlap, _rmtree, strip_paths_in_code, get_code_object
+    check_cache, _check_path_overlap, _rmtree, strip_paths_in_code, get_code_object
 from PyInstaller.compat import is_cygwin, exec_command_all
 from PyInstaller.depend import bindepend
 from PyInstaller.depend.analysis import get_bootstrap_modules
 from PyInstaller.depend.utils import is_path_to_egg
-from PyInstaller.building.datastruct import TOC, Target, logger, _check_guts_eq
+from PyInstaller.building.datastruct import TOC, Target, _check_guts_eq
 from PyInstaller.utils import misc
 from .. import log as logging
 
@@ -96,11 +96,12 @@ class PYZ(Target):
         self.dependencies = misc.compile_py_files(self.dependencies, CONF['workpath'])
         self.__postinit__()
 
-    _GUTS = (# input parameters
-            ('name', _check_guts_eq),
-            ('toc', _check_guts_toc),  # todo: pyc=1
-            # no calculated/analysed values
-            )
+    _GUTS = (
+        # input parameters
+        ('name', _check_guts_eq),
+        ('toc', _check_guts_toc),  # todo: pyc=1
+        # no calculated/analysed values
+    )
 
     def _check_guts(self, data, last_build):
         if Target._check_guts(self, data, last_build):
@@ -188,15 +189,16 @@ class PKG(Target):
                           'PYZ': UNCOMPRESSED}
         self.__postinit__()
 
-    _GUTS = (# input parameters
-            ('name', _check_guts_eq),
-            ('cdict', _check_guts_eq),
-            ('toc', _check_guts_toc),  # list unchanged and no newer files
-            ('exclude_binaries', _check_guts_eq),
-            ('strip_binaries', _check_guts_eq),
-            ('upx_binaries', _check_guts_eq),
-            # no calculated/analysed values
-            )
+    _GUTS = (
+        # input parameters
+        ('name', _check_guts_eq),
+        ('cdict', _check_guts_eq),
+        ('toc', _check_guts_toc),  # list unchanged and no newer files
+        ('exclude_binaries', _check_guts_eq),
+        ('strip_binaries', _check_guts_eq),
+        ('upx_binaries', _check_guts_eq),
+        # no calculated/analysed values
+    )
 
     def _check_guts(self, data, last_build):
         if Target._check_guts(self, data, last_build):
@@ -208,9 +210,9 @@ class PKG(Target):
         trash = []
         mytoc = []
         srctoc = []
-        seenInms = {}
-        seenFnms = {}
-        seenFnms_typ = {}
+        seen_inms = {}
+        seen_fnms = {}
+        seen_fnms_typ = {}
         toc = add_suffix_to_extensions(self.toc)
         # 'inm'  - relative filename inside a CArchive
         # 'fnm'  - absolute filename as it is on the file system.
@@ -228,26 +230,26 @@ class PKG(Target):
                         # Avoid importing the same binary extension twice. This might
                         # happen if they come from different sources (eg. once from
                         # binary dependence, and once from direct import).
-                        if inm in seenInms:
+                        if inm in seen_inms:
                             logger.warn('Two binaries added with the same internal name.')
                             logger.warn(pprint.pformat((inm, fnm, typ)))
                             logger.warn('was placed previously at')
-                            logger.warn(pprint.pformat((inm, seenInms[inm], seenFnms_typ[seenInms[inm]])))
+                            logger.warn(pprint.pformat((inm, seen_inms[inm], seen_fnms_typ[seen_inms[inm]])))
                             logger.warn('Skipping %s.' % fnm)
                             continue
 
                         # Warn if the same binary extension was included
                         # with multiple internal names
-                        if fnm in seenFnms:
+                        if fnm in seen_fnms:
                             logger.warn('One binary added with two internal names.')
                             logger.warn(pprint.pformat((inm, fnm, typ)))
                             logger.warn('was placed previously at')
-                            logger.warn(pprint.pformat((seenFnms[fnm], fnm, seenFnms_typ[fnm])))
-                    seenInms[inm] = fnm
-                    seenFnms[fnm] = inm
-                    seenFnms_typ[fnm] = typ
+                            logger.warn(pprint.pformat((seen_fnms[fnm], fnm, seen_fnms_typ[fnm])))
+                    seen_inms[inm] = fnm
+                    seen_fnms[fnm] = inm
+                    seen_fnms_typ[fnm] = typ
 
-                    fnm = checkCache(fnm, strip=self.strip_binaries,
+                    fnm = check_cache(fnm, strip=self.strip_binaries,
                                      upx=(self.upx_binaries and (is_win or is_cygwin)),
                                      dist_nm=inm)
 
@@ -406,27 +408,28 @@ class EXE(Target):
 
         self.__postinit__()
 
-    _GUTS = (# input parameters
-            ('name', _check_guts_eq),
-            ('console', _check_guts_eq),
-            ('debug', _check_guts_eq),
-            ('exclude_binaries', _check_guts_eq),
-            ('icon', _check_guts_eq),
-            ('versrsrc', _check_guts_eq),
-            ('uac_admin', _check_guts_eq),
-            ('uac_uiaccess', _check_guts_eq),
-            ('manifest', _check_guts_eq),
-            ('append_pkg', _check_guts_eq),
-            # for the case the directory ius shared between platforms:
-            ('pkgname', _check_guts_eq),
-            ('toc', _check_guts_eq),
-            ('resources', _check_guts_eq),
-            ('strip', _check_guts_eq),
-            ('upx', _check_guts_eq),
-            ('mtm', None,),  # checked below
-            # no calculated/analysed values
-            ('exefiles', _check_guts_toc),
-            )
+    _GUTS = (
+        # input parameters
+        ('name', _check_guts_eq),
+        ('console', _check_guts_eq),
+        ('debug', _check_guts_eq),
+        ('exclude_binaries', _check_guts_eq),
+        ('icon', _check_guts_eq),
+        ('versrsrc', _check_guts_eq),
+        ('uac_admin', _check_guts_eq),
+        ('uac_uiaccess', _check_guts_eq),
+        ('manifest', _check_guts_eq),
+        ('append_pkg', _check_guts_eq),
+        # for the case the directory ius shared between platforms:
+        ('pkgname', _check_guts_eq),
+        ('toc', _check_guts_eq),
+        ('resources', _check_guts_eq),
+        ('strip', _check_guts_eq),
+        ('upx', _check_guts_eq),
+        ('mtm', None,),  # checked below
+        # no calculated/analysed values
+        ('exefiles', _check_guts_toc),
+    )
 
     def _check_guts(self, data, last_build):
         if not os.path.exists(self.name):
@@ -669,7 +672,7 @@ class COLLECT(Target):
             if not os.path.exists(todir):
                 os.makedirs(todir)
             if typ in ('EXTENSION', 'BINARY'):
-                fnm = checkCache(fnm, strip=self.strip_binaries,
+                fnm = check_cache(fnm, strip=self.strip_binaries,
                                  upx=(self.upx_binaries and (is_win or is_cygwin)),
                                  dist_nm=inm)
             if typ != 'DEPENDENCY':

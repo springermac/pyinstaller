@@ -24,21 +24,21 @@ from .compat import is_win, is_darwin
 logger = logging.getLogger(__name__)
 
 
-def test_UPX(config, upx_dir):
+def test_upx(config, upx_dir):
     logger.debug('Testing for UPX ...')
     cmd = "upx"
     if upx_dir:
         cmd = os.path.normpath(os.path.join(upx_dir, cmd))
 
-    hasUPX = 0
+    has_upx = 0
     try:
         vers = compat.exec_command(cmd, '-V').strip().splitlines()
         if vers:
             v = vers[0].split()[1]
-            hasUPX = tuple(map(int, v.split(".")))
-            if is_win and hasUPX < (1, 92):
+            has_upx = tuple(map(int, v.split(".")))
+            if is_win and has_upx < (1, 92):
                 logger.error('UPX is too old! Python 2.4 under Windows requires UPX 1.92+')
-                hasUPX = 0
+                has_upx = 0
     except Exception as e:
         if isinstance(e, OSError) and e.errno == 2:
             # No such file or directory
@@ -46,12 +46,12 @@ def test_UPX(config, upx_dir):
         else:
             logger.info('An exception occured when testing for UPX:')
             logger.info('  %r', e)
-    if hasUPX:
+    if has_upx:
         is_available = 'available'
     else:
         is_available = 'not available'
     logger.info('UPX is %s.', is_available)
-    config['hasUPX'] = hasUPX
+    config['hasUPX'] = has_upx
     config['upx_dir'] = upx_dir
 
 
@@ -95,7 +95,7 @@ def get_importhooks_dir(hook_type=None):
 
 def get_config(upx_dir, **kw):
     config = {}
-    test_UPX(config, upx_dir)
+    test_upx(config, upx_dir)
     config['cachedir'] = _get_pyinst_cache_dir()
 
     return config

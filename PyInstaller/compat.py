@@ -656,11 +656,11 @@ except ImportError:
 # Obsolete command line options.
 
 class __obsolete_option:
-    def __init__(self, option_strings, dest, help_, **kwargs):
+    def __init__(self, option_strings, dest, help, **kwargs):
         self.type = bool
         self.option_strings = option_strings
         self.dest = dest
-        self.help = help_
+        self.help = help
         self.default = self.const = False
         self.nargs = self.const = self.choices = self.metavar = None
         self.required = False

@@ -12,7 +12,7 @@ import shutil
 from ..compat import is_darwin, FileExistsError
 from .api import EXE, COLLECT
 from .datastruct import Target, TOC, logger, _check_guts_eq
-from .utils import _check_path_overlap, _rmtree, add_suffix_to_extensions, checkCache
+from .utils import _check_path_overlap, _rmtree, add_suffix_to_extensions, check_cache
 
 
 
@@ -168,7 +168,7 @@ class BUNDLE(Target):
             # Copy files from cache. This ensures that are used files with relative
             # paths to dynamic library dependencies (@executable_path)
             if typ in ('EXTENSION', 'BINARY'):
-                fnm = checkCache(fnm, strip=self.strip, upx=self.upx, dist_nm=inm)
+                fnm = check_cache(fnm, strip=self.strip, upx=self.upx, dist_nm=inm)
             if typ == 'DATA':  # add all data files to a list for symlinking later
                 links.append((inm, fnm))
             else:

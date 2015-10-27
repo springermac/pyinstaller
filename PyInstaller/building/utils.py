@@ -110,7 +110,8 @@ def add_suffix_to_extensions(toc):
         new_toc.append((inm, fnm, typ))
     return new_toc
 
-def applyRedirects(manifest, redirects):
+
+def apply_redirects(manifest, redirects):
     """
     Apply the binding redirects specified by 'redirects' to the dependent assemblies
     of 'manifest'.
@@ -129,7 +130,8 @@ def applyRedirects(manifest, redirects):
                             binding.name, dep.version, binding.newVersion)
                 dep.version = binding.newVersion
 
-def checkCache(fnm, strip=False, upx=False, dist_nm=None):
+
+def check_cache(fnm, strip=False, upx=False, dist_nm=None):
     """
     Cache prevents preprocessing binary files again and again.
 
@@ -181,7 +183,7 @@ def checkCache(fnm, strip=False, upx=False, dist_nm=None):
         basenm = os.path.normcase(dist_nm)
     else:
         basenm = os.path.normcase(os.path.basename(fnm))
-    digest = cacheDigest(fnm)
+    digest = cache_digest(fnm)
     cachedfile = os.path.join(cachedir, basenm)
     cmd = None
     if basenm in cache_index:
@@ -211,14 +213,14 @@ def checkCache(fnm, strip=False, upx=False, dist_nm=None):
                 if dep.name != "Microsoft.Windows.Common-Controls":
                     dep.publicKeyToken = None
 
-        applyRedirects(manifest, redirects)
+        apply_redirects(manifest, redirects)
 
         manifest.writeprettyxml(cachedfile)
         return cachedfile
 
     if upx:
         if strip:
-            fnm = checkCache(fnm, strip=True, upx=False)
+            fnm = check_cache(fnm, strip=True, upx=False)
         bestopt = "--best"
         # FIXME: Linux builds of UPX do not seem to contain LZMA (they assert out)
         # A better configure-time check is due.
@@ -298,7 +300,7 @@ def checkCache(fnm, strip=False, upx=False, dist_nm=None):
                                     # Exclude common-controls which is not bundled
                                     if dep.name != "Microsoft.Windows.Common-Controls":
                                         dep.publicKeyToken = None
-                            applyRedirects(manifest, redirects)
+                            apply_redirects(manifest, redirects)
                             try:
                                 manifest.update_resources(os.path.abspath(cachedfile),
                                                           [name],
@@ -325,7 +327,7 @@ def checkCache(fnm, strip=False, upx=False, dist_nm=None):
     return cachedfile
 
 
-def cacheDigest(fnm):
+def cache_digest(fnm):
     data = open(fnm, "rb").read()
     digest = hashlib.md5(data).digest()
     return digest
