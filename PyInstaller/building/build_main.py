@@ -83,7 +83,7 @@ def setup_upx_flags():
 
 
 class Analysis(Target):
-    """
+    r"""
     Class does analysis of the user's main Python scripts.
 
     An Analysis has five outputs, all TOCs (Table of Contents) accessed as
@@ -95,7 +95,7 @@ class Analysis(Target):
     pure
             The pure Python modules.
     binaries
-            The extensionmodules and their dependencies. The secondary dependecies
+            The extensionmodules and their dependencies. The secondary dependencies
             are filtered. On Windows files from C:\Windows are excluded by default.
             On Linux/Unix only system libraries from /lib or /usr/lib are excluded.
     datas

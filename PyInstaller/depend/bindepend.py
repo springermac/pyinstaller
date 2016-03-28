@@ -712,7 +712,7 @@ def get_imports(pth):
         return _get_imports_ldd(pth)
 
 
-def find_fibrary(name):
+def find_library(name):
     """
     Look for a library in the system.
 
@@ -850,7 +850,7 @@ def get_python_library_path():
 
     if is_unix:
         for name in PYDYLIB_NAMES:
-            python_libname = find_fibrary(name)
+            python_libname = find_library(name)
             if python_libname:
                 return python_libname
 
@@ -887,7 +887,7 @@ def find_system_library(name):
         return name
 
     if is_unix:
-        return findLibrary(name)
+        return find_library(name)
     elif is_win:
         return getfullnameof(name)
     else:

@@ -927,7 +927,7 @@ class Manifest(object):
         domtree.unlink()
         return xmlstr
 
-    def update_resources(self, dstpath, names=None, languages=None):
+    def update_resources(self, dstpath_, names=None, languages=None):
         """ Update or add manifest resource in dll/exe file dstpath """
         update_manifest_resources_from_xml(dstpath_, self.toprettyxml(), names,
                                            languages)
