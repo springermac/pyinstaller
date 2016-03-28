@@ -4,7 +4,7 @@
 ignore=CVS,altgraph,macholib,pefile.py,six.py,unittest2,pefile_py2.py,pefile_py3.py,ordlookup,modulegraph
 [BASIC]
 # Good variable names which should always be accepted, separated by a comma
-good-names=i,j,k,ex,Run,_,hiddenimports,binaries,datas
+good-names=i,j,k,ex,Run,_,hiddenimports,binaries,datas,excludedimports
 # Regular expression matching correct constant names
 const-rgx=(([A-Z_][A-Z0-9_]*)|([a-z_][a-z0-9_]*)|(__.*__))$
 # Naming hint for constant names
