@@ -19,7 +19,7 @@ import sys
 
 from PyInstaller.compat import is_darwin
 from PyInstaller.utils.hooks import exec_statement, collect_data_files, \
-    collect_dynamic_libs, eval_script
+    collect_dynamic_libs
 
 
 # TODO Add Linux support

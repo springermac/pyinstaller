@@ -41,7 +41,7 @@ def get_repo_revision():
                               cwd=cwd).strip()
         if recent.endswith('-dirty'):
             tag, changes, rev, dirty = recent.rsplit('-', 3)
-            rev = rev + '.mod'
+            rev += '.mod'
         else:
             tag, changes, rev = recent.rsplit('-', 2)
         if changes == '0':

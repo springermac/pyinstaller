@@ -270,7 +270,7 @@ def test_option_exclude_module(pyi_builder):
 
 
 def test_option_verbose(pyi_builder, monkeypatch):
-    "Test to ensure that option V can be set and has effect."
+    """Test to ensure that option V can be set and has effect."""
     # This option is like 'python -v' - trace import statements.
     # 'None' should be allowed or '' also.
 
@@ -292,7 +292,7 @@ def test_option_verbose(pyi_builder, monkeypatch):
 
 
 def test_option_w_unset(pyi_builder):
-    "Test to ensure that option W is not set by default."
+    """Test to ensure that option W is not set by default."""
     pyi_builder.test_source(
         """
         import sys
@@ -300,7 +300,7 @@ def test_option_w_unset(pyi_builder):
         """)
 
 def test_option_w_ignore(pyi_builder, monkeypatch):
-    "Test to ensure that option W can be set."
+    """Test to ensure that option W can be set."""
 
     def MyEXE(*args, **kwargs):
         args = list(args)

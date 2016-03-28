@@ -208,7 +208,7 @@ class ArchiveReader(object):
 
         if self.lib.read(len(self.pymagic)) != self.pymagic:
             raise ArchiveReadError("%s has version mismatch to dll" %
-                (self.path))
+                self.path)
 
         self.lib.read(4)
 

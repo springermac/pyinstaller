@@ -51,11 +51,11 @@ gi2_repository_names_skipped_if_unimportable = [
     # Ensure human-readable test parameter names.
     ids=gi2_repository_names)
 def test_gi2_repository(pyi_builder, repository_name):
-    '''
+    """
     Test the importability of the `gi.repository` subpackage with the passed
     name installed with PyGObject >= 2.0 (e.g., `GLib`, corresponding to the
     `gi.repository.GLib` subpackage).
-    '''
+    """
 
     # Test the importability of this subpackage.
     pyi_builder.test_source('''

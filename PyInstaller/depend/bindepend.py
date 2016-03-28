@@ -15,7 +15,6 @@ Find external dependencies of binary libraries.
 import os
 import sys
 import re
-import platform
 import ctypes.util
 from glob import glob
 
@@ -118,9 +117,9 @@ def _get_imports_pe(pth):
 
     # We must also read the exports table to find forwarded symbols:
     # http://blogs.msdn.com/b/oldnewthing/archive/2006/07/19/671238.aspx
-    exportSymbols = getattr(pe, 'DIRECTORY_ENTRY_EXPORT', None)
-    if exportSymbols:
-        for sym in exportSymbols.symbols:
+    export_symbols = getattr(pe, 'DIRECTORY_ENTRY_EXPORT', None)
+    if export_symbols:
+        for sym in export_symbols.symbols:
             if sym.forwarder is not None:
                 # sym.forwarder is for example 'KERNEL32.EnterCriticalSection'
                 dll, _ = sym.forwarder.split('.')
@@ -877,11 +876,11 @@ def get_python_library_path():
     # Python library NOT found. Return just None.
     return None
 
-def findSystemLibrary(name):
-    '''
+def find_system_library(name):
+    """
         Given a library name, try to resolve the path to that library. If the
         path is already an absolute path, return that without searching.
-    '''
+    """
 
     if os.path.isabs(name):
         return name

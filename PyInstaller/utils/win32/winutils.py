@@ -65,10 +65,10 @@ def extend_system_path(paths):
 
     Some hooks might extend PATH where PyInstaller should look for dlls.
     """
-    old_PATH = compat.getenv('PATH', '')
-    paths.append(old_PATH)
-    new_PATH = os.pathsep.join(paths)
-    compat.setenv('PATH', new_PATH)
+    old_path = compat.getenv('PATH', '')
+    paths.append(old_path)
+    new_path = os.pathsep.join(paths)
+    compat.setenv('PATH', new_path)
 
 
 def import_pywin32_module(module_name):

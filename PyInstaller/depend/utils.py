@@ -26,8 +26,7 @@ from ..lib.modulegraph import modulegraph
 
 from .. import compat
 from ..compat import (is_darwin, is_unix, is_py2, is_freebsd,
-                      BYTECODE_MAGIC, PY3_BASE_MODULES,
-                      exec_python_rc)
+                      BYTECODE_MAGIC, PY3_BASE_MODULES)
 from .dylib import include_library
 from .. import log as logging
 
@@ -130,11 +129,11 @@ def pass1(code):
         if i >= out:
             incondition = 0
         c = code[i]
-        i = i + 1
+        i += 1
         op = _cOrd(c)
         if op >= dis.HAVE_ARGUMENT:
             oparg = _cOrd(code[i]) + _cOrd(code[i + 1]) * 256
-            i = i + 2
+            i += 2
         else:
             oparg = None
         if not incondition and op in COND_OPS:

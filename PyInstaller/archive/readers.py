@@ -18,7 +18,7 @@ import struct
 
 
 from PyInstaller.loader.pyimod02_archive import (
-    ArchiveReader, PYZ_TYPE_MODULE, PYZ_TYPE_PKG, PYZ_TYPE_DATA)
+    ArchiveReader)
 
 
 class NotAnArchiveError(Exception):
@@ -49,9 +49,9 @@ class CTOCReader(object):
             (slen, dpos, dlen, ulen, flag, typcd) = struct.unpack(self.ENTRYSTRUCT,
                                                         s[p:p + self.ENTRYLEN])
             nmlen = slen - self.ENTRYLEN
-            p = p + self.ENTRYLEN
+            p += self.ENTRYLEN
             (nm,) = struct.unpack('%is' % nmlen, s[p:p + nmlen])
-            p = p + nmlen
+            p += nmlen
             # nm may have up to 15 bytes of padding
             nm = nm.rstrip(b'\0')
             nm = nm.decode('utf-8')
@@ -203,9 +203,9 @@ class CArchiveReader(ArchiveReader):
             import zlib
             rslt = zlib.decompress(rslt)
         if typcd == 'M':
-            return (1, rslt)
+            return 1, rslt
 
-        return (typcd == 'M', rslt)
+        return typcd == 'M', rslt
 
     def contents(self):
         """

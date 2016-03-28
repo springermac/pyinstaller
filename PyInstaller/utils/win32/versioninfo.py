@@ -174,7 +174,7 @@ class VSVersionInfo:
                 get_raw(nm) + '\000\000' + pad + rawffi + pad2 + tmp)
 
     def __unicode__(self, indent=u''):
-        indent = indent + u'  '
+        indent += u'  '
         tmp = [kid.__unicode__(indent+u'  ')
                for kid in self.kids]
         tmp = u', \n'.join(tmp)
@@ -393,7 +393,7 @@ class StringTable:
         for kid in self.kids:
             raw = kid.to_raw()
             if len(raw) % 4:
-                raw = raw + '\000\000'
+                raw += '\000\000'
             tmp.append(raw)
         tmp = ''.join(tmp)
         sublen += len(tmp)

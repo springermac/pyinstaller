@@ -467,14 +467,14 @@ class EXE(Target):
         # Mac OS X.
         if is_win or is_darwin:
             if not self.console:
-                exe = exe + 'w'
+                exe += 'w'
         # There are two types of bootloaders:
         # run     - release, no verbose messages in console.
         # run_d   - contains verbose messages in console.
         if self.debug:
-            exe = exe + '_d'
+            exe += '_d'
         if extension:
-            exe = exe + extension
+            exe += extension
         bootloader_file = os.path.join(HOMEPATH, 'PyInstaller', 'bootloader', PLATFORM, exe)
         logger.info('Bootloader %s' % bootloader_file)
         return bootloader_file

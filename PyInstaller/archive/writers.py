@@ -255,7 +255,7 @@ class CTOC(object):
             else:
                 padlen = 16 - (toclen % 16)
                 pad = b'\0' * padlen
-                nmlen = nmlen + padlen
+                nmlen += padlen
             rslt.append(struct.pack(self.ENTRYSTRUCT + '%is' % nmlen,
                                     nmlen + self.ENTRYLEN, dpos, dlen, ulen,
                                     flag, ord(typcd), nm + pad))

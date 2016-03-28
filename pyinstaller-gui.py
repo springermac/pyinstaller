@@ -12,7 +12,6 @@
 #
 
 
-import sys
 import subprocess
 
 # In Python 3 module name is 'tkinter'

@@ -643,36 +643,36 @@ class Manifest(object):
         
         """
         if domtree.nodeType == Node.DOCUMENT_NODE:
-            rootElement = domtree.documentElement
+            root_element = domtree.documentElement
         elif domtree.nodeType == Node.ELEMENT_NODE:
-            rootElement = domtree
+            root_element = domtree
         else:
             raise InvalidManifestError("Invalid root element node type " + 
-                                       str(rootElement.nodeType) + 
+                                       str(root_element.nodeType) +
                                        " - has to be one of (DOCUMENT_NODE, "
                                        "ELEMENT_NODE)")
         allowed_names = ("assembly", "assemblyBinding", "configuration", 
                          "dependentAssembly")
-        if rootElement.tagName not in allowed_names:
+        if root_element.tagName not in allowed_names:
             raise InvalidManifestError(
                 "Invalid root element <%s> - has to be one of <%s>" % 
-                (rootElement.tagName, ">, <".join(allowed_names)))
-        # logger.info("loading manifest metadata from element <%s>", rootElement.tagName)
-        if rootElement.tagName == "configuration":
-            for windows in rootElement.getCEByTN("windows"):
+                (root_element.tagName, ">, <".join(allowed_names)))
+        # logger.info("loading manifest metadata from element <%s>", root_element.tagName)
+        if root_element.tagName == "configuration":
+            for windows in root_element.getCEByTN("windows"):
                 for assemblyBinding in windows.getCEByTN("assemblyBinding"):
                     self.load_dom(assemblyBinding, initialize)
         else:
             if initialize:
                 self.__init__()
-            self.manifestType = rootElement.tagName
+            self.manifestType = root_element.tagName
             self.manifestVersion = [int(i) 
                                     for i in 
-                                    (rootElement.getA("manifestVersion") or 
+                                    (root_element.getA("manifestVersion") or
                                      "1.0").split(".")]
-            self.noInheritable = bool(rootElement.getFCEByTN("noInheritable"))
-            self.noInherit = bool(rootElement.getFCEByTN("noInherit"))
-            for assemblyIdentity in rootElement.getCEByTN("assemblyIdentity"):
+            self.noInheritable = bool(root_element.getFCEByTN("noInheritable"))
+            self.noInherit = bool(root_element.getFCEByTN("noInherit"))
+            for assemblyIdentity in root_element.getCEByTN("assemblyIdentity"):
                 self.type = assemblyIdentity.getA("type") or None
                 self.name = assemblyIdentity.getA("name") or None
                 self.language = assemblyIdentity.getA("language") or None
@@ -682,23 +682,23 @@ class Manifest(object):
                 if version:
                     self.version = tuple(int(i) for i in version.split("."))
                 self.publicKeyToken = assemblyIdentity.getA("publicKeyToken") or None
-            for publisherPolicy in rootElement.getCEByTN("publisherPolicy"):
+            for publisherPolicy in root_element.getCEByTN("publisherPolicy"):
                 self.applyPublisherPolicy = (publisherPolicy.getA("apply") or 
                                              "").lower() == "yes"
-            for description in rootElement.getCEByTN("description"):
+            for description in root_element.getCEByTN("description"):
                 if description.firstChild:
                     self.description = description.firstChild.wholeText
-            for trustInfo in rootElement.getCEByTN("trustInfo"):
+            for trustInfo in root_element.getCEByTN("trustInfo"):
                 for security in trustInfo.getCEByTN("security"):
                     for reqPriv in security.getCEByTN("requestedPrivileges"):
                         for reqExeLev in reqPriv.getCEByTN("requestedExecutionLevel"):
                             self.requestedExecutionLevel = reqExeLev.getA("level")
                             self.uiAccess = (reqExeLev.getA("uiAccess") or 
                                              "").lower() == "true"
-            if rootElement.tagName == "assemblyBinding":
-                dependencies = [rootElement]
+            if root_element.tagName == "assemblyBinding":
+                dependencies = [root_element]
             else:
-                dependencies = rootElement.getCEByTN("dependency")
+                dependencies = root_element.getCEByTN("dependency")
             for dependency in dependencies:
                 for dependentAssembly in dependency.getCEByTN(
                         "dependentAssembly"):
@@ -714,7 +714,7 @@ class Manifest(object):
                         # filename (only the directory has to be correct)
                         self.dependentAssemblies[-1].filename = ":".join(
                             (self.filename, manifest.name))
-            for bindingRedirect in rootElement.getCEByTN("bindingRedirect"):
+            for bindingRedirect in root_element.getCEByTN("bindingRedirect"):
                 old_version = tuple(tuple(int(i) for i in part.split("."))
                                     for part in
                                     bindingRedirect.getA("old_version").split("-"))
@@ -722,7 +722,7 @@ class Manifest(object):
                                     for i in
                                     bindingRedirect.getA("new_version").split("."))
                 self.bindingRedirects.append((old_version, new_version))
-            for file_ in rootElement.getCEByTN("file"):
+            for file_ in root_element.getCEByTN("file"):
                 self.add_file(name=file_.getA("name"),
                               hashalg=file_.getA("hashalg"),
                               hash=file_.getA("hash"))
@@ -777,24 +777,24 @@ class Manifest(object):
     def todom(self):
         """ Return the manifest as DOM tree """
         doc = Document()
-        docE = doc.cE(self.manifestType)
+        doc_e = doc.cE(self.manifestType)
         if self.manifestType == "assemblyBinding":
             cfg = doc.cE("configuration")
             win = doc.cE("windows")
-            win.aChild(docE)
+            win.aChild(doc_e)
             cfg.aChild(win)
             doc.aChild(cfg)
         else:
-            doc.aChild(docE)
+            doc.aChild(doc_e)
         if self.manifestType != "dependentAssembly":
-            docE.setA("xmlns", "urn:schemas-microsoft-com:asm.v1")
+            doc_e.setA("xmlns", "urn:schemas-microsoft-com:asm.v1")
             if self.manifestType != "assemblyBinding":
-                docE.setA("manifestVersion", 
+                doc_e.setA("manifestVersion",
                           ".".join([str(i) for i in self.manifestVersion]))
         if self.noInheritable:
-            docE.aChild(doc.cE("noInheritable"))
+            doc_e.aChild(doc.cE("noInheritable"))
         if self.noInherit:
-            docE.aChild(doc.cE("noInherit"))
+            doc_e.aChild(doc.cE("noInherit"))
         a_id = doc.cE("assemblyIdentity")
         if self.type:
             a_id.setAttribute("type", self.type)
@@ -811,7 +811,7 @@ class Manifest(object):
         if self.publicKeyToken:
             a_id.setAttribute("publicKeyToken", self.publicKeyToken)
         if a_id.hasAttributes():
-            docE.aChild(a_id)
+            doc_e.aChild(a_id)
         else:
             a_id.unlink()
         if self.applyPublisherPolicy is not None:
@@ -820,11 +820,11 @@ class Manifest(object):
                 pp_e.setA("apply", "yes")
             else:
                 pp_e.setA("apply", "no")
-            docE.aChild(pp_e)
+            doc_e.aChild(pp_e)
         if self.description:
             desc_e = doc.cE("description")
             desc_e.aChild(doc.cT(self.description))
-            docE.aChild(desc_e)
+            doc_e.aChild(desc_e)
         if self.requestedExecutionLevel in ("asInvoker", "highestAvailable",
                                             "requireAdministrator"):
             t_e = doc.cE("trustInfo")
@@ -840,7 +840,7 @@ class Manifest(object):
             rp_e.aChild(rel_e)
             s_e.aChild(rp_e)
             t_e.aChild(s_e)
-            docE.aChild(t_e)
+            doc_e.aChild(t_e)
         if self.dependentAssemblies:
             for assembly in self.dependentAssemblies:
                 if self.manifestType != "assemblyBinding":
@@ -854,9 +854,9 @@ class Manifest(object):
                 adom.unlink()
                 if self.manifestType != "assemblyBinding":
                     d_e.aChild(da_e)
-                    docE.aChild(d_e)
+                    doc_e.aChild(d_e)
                 else:
-                    docE.aChild(da_e)
+                    doc_e.aChild(da_e)
         if self.bindingRedirects:
             for bindingRedirect in self.bindingRedirects:
                 br_e = doc.cE("bindingRedirect")
@@ -868,15 +868,15 @@ class Manifest(object):
                                             bindingRedirect[0]]))
                 br_e.setAttribute("newVersion",
                                   ".".join([str(i) for i in bindingRedirect[1]]))
-                docE.aChild(br_e)
+                doc_e.aChild(br_e)
         if self.files:
             for file_ in self.files:
-                fE = doc.cE("file")
+                f_e = doc.cE("file")
                 for attr in ("name", "hashalg", "hash"):
                     val = getattr(file_, attr)
                     if val:
-                        fE.setA(attr, val)
-                docE.aChild(fE)
+                        f_e.setA(attr, val)
+                doc_e.aChild(f_e)
 
         # Add compatibility section: http://stackoverflow.com/a/10158920
         c_e = doc.cE("compatibility")
@@ -892,7 +892,7 @@ class Manifest(object):
             sos_e.setAttribute("Id", guid)
             ca_e.aChild(sos_e)
         c_e.aChild(ca_e)
-        docE.aChild(c_e)
+        doc_e.aChild(c_e)
 
         return doc
     

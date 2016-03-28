@@ -83,7 +83,7 @@ from distutils.command.build import build
 from setuptools.command.bdist_egg import bdist_egg
 
 
-class build_bootloader(Command):
+class BuildBootloader(Command):
     """
     Wrapper for distutil command `build`.
     """
@@ -113,9 +113,9 @@ class build_bootloader(Command):
             except:
                 env['PATH'] = '/opt/lsb/bin'
             try:
-                FNULL = open(os.devnull, 'w')
+                fnull = open(os.devnull, 'w')
                 if subprocess.call(['which', 'lsbcc'], env=env,
-                                   stderr=FNULL, stdout=FNULL,
+                                   stderr=fnull, stdout=fnull,
                                    close_fds=True) == 0:
                     nolsb = False
             except compat.FileNotFoundError:
@@ -138,14 +138,14 @@ class build_bootloader(Command):
 
 
 class MyBuild(build):
-    # plug `build_bootloader` into the `build` command
+    # plug `BuildBootloader` into the `build` command
     def run(self):
-        self.run_command('build_bootloader')
+        self.run_command('BuildBootloader')
         build.run(self)
 
-class MyBDist_Egg(bdist_egg):
+class MyBDistEgg(bdist_egg):
     def run(self):
-        self.run_command('build_bootloader')
+        self.run_command('BuildBootloader')
         bdist_egg.run(self)
 
 #--
@@ -170,9 +170,9 @@ setup(
              '(including commercial ones)'),
     url='http://www.pyinstaller.org',
 
-    cmdclass = {'build_bootloader': build_bootloader,
+    cmdclass = {'BuildBootloader': BuildBootloader,
                 'build': MyBuild,
-                'bdist_egg': MyBDist_Egg,
+                'bdist_egg': MyBDistEgg,
                 },
 
     classifiers=CLASSIFIERS,

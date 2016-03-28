@@ -228,7 +228,7 @@ def _collect_tcl_tk_files(hook_api):
     if is_darwin:
         _warn_if_activetcl_or_teapot_installed(tcl_root, tcltree)
 
-    return (tcltree + tktree)
+    return tcltree + tktree
 
 
 def hook(hook_api):

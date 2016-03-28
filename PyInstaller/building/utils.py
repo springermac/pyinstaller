@@ -106,7 +106,7 @@ def add_suffix_to_extensions(toc):
             # TODO Verify what extensions are by DEPENDENCIES.
             binext = os.path.splitext(fnm)[1]
             if not os.path.splitext(inm)[1] == binext:
-                inm = inm + binext
+                inm += binext
         new_toc.append((inm, fnm, typ))
     return new_toc
 
@@ -165,7 +165,7 @@ def check_cache(fnm, strip=False, upx=False, dist_nm=None):
     # Make cachedir per Python major/minor version.
     # This allows parallel building of executables with different
     # Python versions as one user.
-    pyver = ('py%d%s') % (sys.version_info[0], sys.version_info[1])
+    pyver = 'py%d%s' % (sys.version_info[0], sys.version_info[1])
     arch = platform.architecture()[0]
     cachedir = os.path.join(CONF['cachedir'], 'bincache%d%d_%s_%s' % (strip, upx, pyver, arch))
     if not os.path.exists(cachedir):

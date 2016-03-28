@@ -21,7 +21,7 @@ try:
     raise Exception('Self-test of hook %s failed: hook for parent exists'
                     % NAME)
 except ImportError as e:
-    if (hasattr(e, 'name') and e.name == hookmodnm): # python3
+    if hasattr(e, 'name') and e.name == hookmodnm: # python3
         pass # okay
     elif  not e.args[0].endswith(' '+hookmodnm): # python2
         raise Exception('Self-test of hook %s failed: hook for parent exists '

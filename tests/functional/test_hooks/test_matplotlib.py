@@ -53,13 +53,13 @@ package_names = [
     ids=package_names)
 def test_matplotlib(
     pyi_builder, backend_name, package_name, rcParams_key, rcParams_value):
-    '''
+    """
     Test Matplotlib with the passed backend enabled, the passed backend package
     included with this frozen application, all other backend packages explicitly
     excluded from this frozen application, and the passed rcParam key set to the
     corresponding passed value if that key is _not_ `None` or ignore that value
     otherwise.
-    '''
+    """
 
     # PyInstaller options excluding all backend packages except the passed
     # backend package. This is especially critical for Qt backend packages

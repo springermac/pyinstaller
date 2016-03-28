@@ -29,7 +29,7 @@ from ...compat import is_py2, is_win, is_py3, is_darwin, EXTENSION_SUFFIXES
 from ...utils import misc
 from ... import HOMEPATH
 from ... import log as logging
-from ...depend.bindepend import findSystemLibrary
+from ...depend.bindepend import find_system_library
 
 logger = logging.getLogger(__name__)
 
@@ -1065,7 +1065,7 @@ def relpath_to_config_or_make(filename):
 
 
 def get_typelibs(module, version):
-    '''deprecated; only here for backwards compat'''
+    """deprecated; only here for backwards compat"""
     logger.warn("get_typelibs is deprecated, use get_gi_typelibs instead")
     return get_gi_typelibs(module, version)[1]
 
@@ -1084,7 +1084,7 @@ print(repo.get_shared_library(module))
     statement %= (module, version)
     libs = exec_statement(statement).split(',')
     for lib in libs:
-        path = findSystemLibrary(lib.strip())
+        path = find_system_library(lib.strip())
         return os.path.normpath(os.path.dirname(path))
 
     raise ValueError("Could not find libdir for %s-%s" % (module, version))
@@ -1129,7 +1129,7 @@ print({'sharedlib': repo.get_shared_library(module),
 
         if typelibs_data['sharedlib']:
             for lib in typelibs_data['sharedlib'].split(','):
-                path = findSystemLibrary(lib.strip())
+                path = find_system_library(lib.strip())
                 if path:
                     logger.debug('Found shared library %s at %s', lib, path)
                     binaries.append((path, ''))

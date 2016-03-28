@@ -84,7 +84,7 @@ PyInstaller is available on PyPI. You can install it through `pip`::
 
 
 Requirements and Tested Platforms
-------------------------------------
+---------------------------------
 
 - Python: 
 
@@ -123,7 +123,7 @@ For more details, see the `manual`_.
 
 
 Untested Platforms
----------------------
+------------------
 
 The following platforms have been contributed and any feedback or
 enhancements on these are welcome.
