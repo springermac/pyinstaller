@@ -59,7 +59,8 @@ _init_code_path = os.path.join(HOMEPATH, 'PyInstaller', 'loader')
 def _old_api_error(obj_name):
     """
     Cause PyInstall to exit when .spec file uses old api.
-    :param obj_name: Name of the old api that is no longer suppored.
+
+    :param obj_name: Name of the old api that is no longer supported.
     """
     raise SystemExit('%s has been removed in PyInstaller 2.0. '
                      'Please update your spec-file. See '
@@ -266,7 +267,7 @@ class Analysis(Target):
         pathex = []
         # Add scripts paths first.
         for script in scripts:
-            logger.debug('script: %s' % script)
+            logger.debug('script: %s', script)
             script_toplevel_dir = get_path_to_toplevel_modules(script)
             if script_toplevel_dir:
                 pathex.append(script_toplevel_dir)
@@ -300,9 +301,7 @@ class Analysis(Target):
         return False
 
     def assemble(self):
-        """
-        This method is the MAIN method for finding all necessary files to be bundled.
-        """
+        """This method is the MAIN method for finding all necessary files to be bundled."""
         from ..config import CONF
 
         # Either instantiate a ModuleGraph object or for tests reuse
@@ -312,8 +311,8 @@ class Analysis(Target):
             logger.info('Reusing basic module graph object.')
             self.graph = CONF['tests_modgraph']
         else:
-            for m in self.excludes:
-                logger.debug("Excluding module '%s'" % m)
+            for module in self.excludes:
+                logger.debug("Excluding module '%s'" % module)
             self.graph = initialize_modgraph(
                 excludes=self.excludes, user_hook_dirs=self.hookspath)
 
@@ -498,10 +497,10 @@ class Analysis(Target):
         # First get code objects of all modules that import 'ctypes'.
         logger.info('Looking for ctypes DLLs')
         ctypes_code_objs = self.graph.get_co_using_ctypes()  # dict like:  {'module1': code_obj, 'module2': code_obj}
-        for name, co in ctypes_code_objs.items():
+        for name, code_object in ctypes_code_objs.items():
             # Get dlls that might be needed by ctypes.
             logger.debug('Scanning %s for shared libraries or dlls', name)
-            ctypes_binaries = scan_code_for_ctypes(co)
+            ctypes_binaries = scan_code_for_ctypes(code_object)
             self.binaries.extend(set(ctypes_binaries))
 
         # Analyze run-time hooks.
@@ -564,17 +563,17 @@ class Analysis(Target):
         # "no module named foo conditional/deferred/toplevel importy by bar"
         from ..config import CONF
         miss_toc = self.graph.make_missing_toc()
-        if len(miss_toc) : # there are some missing modules
+        if len(miss_toc): # there are some missing modules
             wf = open(CONF['warnfile'], 'w')
-            for (n, p, status) in miss_toc :
+            for (n, p, status) in miss_toc:
                 importer_names = self.graph.importer_names(n)
-                wf.write( status
-                          + ' module named '
-                          + n
-                          + ' - imported by '
-                          + ', '.join(importer_names)
-                          + '\n'
-                          )
+                wf.write(status +
+                         ' module named ' +
+                         n +
+                         ' - imported by ' +
+                         ', '.join(importer_names) +
+                         '\n'
+                         )
             wf.close()
             logger.info("Warnings written to %s", CONF['warnfile'])
 
@@ -584,17 +583,18 @@ class Analysis(Target):
         if logger.getEffectiveLevel() > logging.DEBUG:
             return
         from ..config import CONF
-        with open(CONF['dot-file'], 'w') as fh:
-            self.graph.graphreport(fh)
+        with open(CONF['dot-file'], 'w') as file_object:
+            self.graph.graphreport(file_object)
             logger.info("Graph drawing written to %s", CONF['dot-file'])
-        with open(CONF['xref-file'], 'w') as fh:
-            self.graph.create_xref(fh)
+        with open(CONF['xref-file'], 'w') as file_object:
+            self.graph.create_xref(file_object)
             logger.info("Graph cross-reference written to %s", CONF['xref-file'])
 
 
     def _check_python_library(self, binaries):
         """
         Verify presence of the Python dynamic library in the binary dependencies.
+
         Python library is an essential piece that has to be always included.
         """
         # First check that libpython is in resolved binary dependencies.
@@ -606,7 +606,7 @@ class Analysis(Target):
                 return
 
         # Python lib not in dependencies - try to find it.
-        logger.info('Python library not in binary depedencies. Doing additional searching...')
+        logger.info('Python library not in binary dependencies. Doing additional searching...')
         python_lib = bindepend.get_python_library_path()
         if python_lib:
             logger.debug('Adding Python library to binary dependencies')
@@ -633,13 +633,11 @@ class ExecutableBuilder(object):
 
 
 def build(spec, distpath, workpath, clean_build):
-    """
-    Build the executable according to the created SPEC file.
-    """
+    """Build the executable according to the created SPEC file."""
     from ..config import CONF
 
-    # For combatibility with Python < 2.7.9 we can not use `lambda`,
-    # but need to declare _old_api_error as beeing global, see issue #1408
+    # For compatibility with Python < 2.7.9 we can not use `lambda`,
+    # but need to declare _old_api_error as being global, see issue #1408
     def tk_pkg(*args, **kwargs):
         global _old_api_error
         _old_api_error('tk_pkg')
@@ -677,12 +675,12 @@ def build(spec, distpath, workpath, clean_build):
         for pth in (CONF['cachedir'], workpath):
             if os.path.exists(pth):
                 # Remove all files in 'pth'.
-                for f in glob.glob(pth + '/*'):
+                for file_path in glob.glob(pth + '/*'):
                     # Remove dirs recursively.
-                    if os.path.isdir(f):
-                        shutil.rmtree(f)
+                    if os.path.isdir(file_path):
+                        shutil.rmtree(file_path)
                     else:
-                        os.remove(f)
+                        os.remove(file_path)
 
     # Create DISTPATH and workpath if they does not exist.
     for pth in (CONF['distpath'], workpath):
@@ -728,8 +726,8 @@ def build(spec, distpath, workpath, clean_build):
     CONF['workpath'] = workpath
 
     # Executing the specfile.
-    with open(spec, 'r') as f:
-        text = f.read()
+    with open(spec, 'r') as spec_file:
+        text = spec_file.read()
     exec(text, spec_namespace)
 
 

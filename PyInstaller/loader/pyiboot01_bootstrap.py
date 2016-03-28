@@ -120,7 +120,6 @@ if sys.warnoptions:
 
 try:
     import ctypes
-    import os
     from ctypes import LibraryLoader, DEFAULT_MODE
 
     class PyInstallerCDLL(ctypes.CDLL):
@@ -145,7 +144,7 @@ try:
 
     if sys.platform.startswith('win'):
         class PyInstallerWinDLL(ctypes.WinDLL):
-            def __init__(self, name,*args, **kwargs):
+            def __init__(self, name, *args, **kwargs):
                 frozen_name = os.path.join(sys._MEIPASS, os.path.basename(name))
                 if os.path.exists(frozen_name):
                     name = frozen_name
@@ -155,7 +154,7 @@ try:
         ctypes.windll = LibraryLoader(PyInstallerWinDLL)
 
         class PyInstallerOleDLL(ctypes.OleDLL):
-            def __init__(self, name,*args, **kwargs):
+            def __init__(self, name, *args, **kwargs):
                 frozen_name = os.path.join(sys._MEIPASS, os.path.basename(name))
                 if os.path.exists(frozen_name):
                     name = frozen_name
@@ -182,12 +181,12 @@ if sys.platform.startswith('darwin'):
 
 
 # Make .eggs and zipfiles available at runtime
-d = "eggs"
-d = os.path.join(sys._MEIPASS, d)
+eggs_dir = "eggs"
+eggs_dir = os.path.join(sys._MEIPASS, eggs_dir)
 # Test if the 'eggs' directory exists. This allows to
 # opportunistically including this script into the packaged exe, even
 # if no eggs as found when packaging the program. (Which may be a
 # use-case, see issue #653.
-if os.path.isdir(d):
-    for fn in os.listdir(d):
-        sys.path.append(os.path.join(d, fn))
+if os.path.isdir(eggs_dir):
+    for fn in os.listdir(eggs_dir):
+        sys.path.append(os.path.join(eggs_dir, fn))
