@@ -18,7 +18,7 @@ import struct
 
 
 from PyInstaller.loader.pyimod02_archive import (
-    ArchiveReader)
+    ArchiveReader, PYZ_TYPE_MODULE, PYZ_TYPE_PKG, PYZ_TYPE_DATA)
 
 
 class NotAnArchiveError(Exception):
