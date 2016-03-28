@@ -11,3 +11,5 @@ ignore-patterns:
     - lib/macholib
     - lib/ordlookup
     - lib/pefile*.py
+pyflakes:
+    run: false
