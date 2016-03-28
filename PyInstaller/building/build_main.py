@@ -312,7 +312,7 @@ class Analysis(Target):
             self.graph = CONF['tests_modgraph']
         else:
             for module in self.excludes:
-                logger.debug("Excluding module '%s'" % module)
+                logger.debug("Excluding module '%s'", module)
             self.graph = initialize_modgraph(
                 excludes=self.excludes, user_hook_dirs=self.hookspath)
 
@@ -564,17 +564,17 @@ class Analysis(Target):
         from ..config import CONF
         miss_toc = self.graph.make_missing_toc()
         if len(miss_toc): # there are some missing modules
-            wf = open(CONF['warnfile'], 'w')
+            warn_file = open(CONF['warnfile'], 'w')
             for (n, p, status) in miss_toc:
                 importer_names = self.graph.importer_names(n)
-                wf.write(status +
+                warn_file.write(status +
                          ' module named ' +
                          n +
                          ' - imported by ' +
                          ', '.join(importer_names) +
                          '\n'
-                         )
-            wf.close()
+                        )
+            warn_file.close()
             logger.info("Warnings written to %s", CONF['warnfile'])
 
     def _write_graph_debug(self):

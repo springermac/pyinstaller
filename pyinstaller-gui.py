@@ -13,21 +13,23 @@
 
 
 import subprocess
+import sys
 
 # In Python 3 module name is 'tkinter'
 try:
-    from tkinter import *
-    from tkinter.ttk import *
+    from tkinter import IntVar, Tk
+    from tkinter.ttk import Button, Checkbutton, Frame, Entry
     import tkinter.filedialog as filedialog
 except ImportError:
-    from Tkinter import *
-    from ttk import *
+    from Tkinter import IntVar, Tk
+    from ttk import Button, Checkbutton, Frame, Entry
     import tkFileDialog as filedialog
 
 
 class PyInstallerGUI:
 
-    def make_checkbutton(self, frame, text):
+    @staticmethod
+    def make_checkbutton(frame, text):
         var = IntVar()
         widget = Checkbutton(frame, text=text, variable=var)
         widget.grid(sticky="NW")
@@ -71,15 +73,16 @@ class PyInstallerGUI:
         cancelbutton.pack(side="right")
         self.fin = ''
 
-        ws = root.winfo_screenwidth()
-        hs = root.winfo_screenheight()
-        x = (ws/2) - (400/2)
-        y = (hs/2) - (250/2)
-        root.geometry('%dx%d+%d+%d' % (400, 250, x, y))
+        width_of_screen = root.winfo_screenwidth()
+        height_of_screen = root.winfo_screenheight()
+        x_coord = (width_of_screen/2) - (400/2)
+        y_coord = (height_of_screen/2) - (250/2)
+        root.geometry('%dx%d+%d+%d' % (400, 250, x_coord, y_coord))
 
         root.mainloop()
 
-    def killapp(self, event):
+    @staticmethod
+    def killapp(event):
         sys.exit(0)
 
     def make_package(self, event):
