@@ -878,8 +878,9 @@ def get_python_library_path():
 
 def find_system_library(name):
     """
-        Given a library name, try to resolve the path to that library. If the
-        path is already an absolute path, return that without searching.
+    Given a library name, try to resolve the path to that library.
+
+    If the path is already an absolute path, return that without searching.
     """
 
     if os.path.isabs(name):

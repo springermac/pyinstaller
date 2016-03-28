@@ -790,7 +790,7 @@ class Manifest(object):
             doc_e.setA("xmlns", "urn:schemas-microsoft-com:asm.v1")
             if self.manifestType != "assemblyBinding":
                 doc_e.setA("manifestVersion",
-                          ".".join([str(i) for i in self.manifestVersion]))
+                           ".".join([str(i) for i in self.manifestVersion]))
         if self.noInheritable:
             doc_e.aChild(doc.cE("noInheritable"))
         if self.noInherit:
