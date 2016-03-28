@@ -568,12 +568,12 @@ class Analysis(Target):
             for (n, p, status) in miss_toc:
                 importer_names = self.graph.importer_names(n)
                 warn_file.write(status +
-                         ' module named ' +
-                         n +
-                         ' - imported by ' +
-                         ', '.join(importer_names) +
-                         '\n'
-                        )
+                                ' module named ' +
+                                n +
+                                ' - imported by ' +
+                                ', '.join(importer_names) +
+                                '\n'
+                               )
             warn_file.close()
             logger.info("Warnings written to %s", CONF['warnfile'])
 
