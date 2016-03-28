@@ -62,13 +62,8 @@
 #                  version-encoding-standalone (standalone being optional)
 #             add: 'encoding' keyword argument in toxml, toprettyxml, writexml 
 #                  and writeprettyxml methods
-<<<<<<< 54c57476c69a65b933a733d29012ec33e71dc1b2
-#             chg: UpdateManifestResourcesFromXML and 
-#                  UpdateManifestResourcesFromXMLFile: set resource name 
-=======
 #             chg: update_manifest_resources_from_xml and
 #                  update_manifest_resources_from_xml_file: set resource name
->>>>>>> More cleanups
 #                  depending on file type ie. exe or dll
 #             fix: typo in __main__: UpdateManifestResourcesFromDataFile
 #                  should have been update_manifest_resources_from_xml_file

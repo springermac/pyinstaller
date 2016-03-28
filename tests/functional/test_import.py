@@ -216,17 +216,6 @@ _template_ctypes_test = """
             print('>>> file found')
     """
 
-_template_ctypes_test = """
-        print(lib)
-        assert lib is not None and lib._name is not None
-        import sys, os
-        if getattr(sys, 'frozen', False):
-            libfile = os.path.join(sys._MEIPASS, %(soname)r)
-            print(libfile)
-            assert os.path.isfile(libfile), '%(soname)s is missing'
-            print('>>> file found')
-    """
-
 parameters = []
 ids = []
 for prefix in ('', 'ctypes.'):

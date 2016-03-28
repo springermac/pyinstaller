@@ -17,11 +17,7 @@ os:
 
 env:
    # shorten logging of pip-accel
-<<<<<<< 95d6d8029301c86a41b2865a024f0befe9d0ee66
    - PIP_ACCEL_LOG_FORMAT="%(name)-18s %(levelname)s %(message)s"
-=======
-   - COLOREDLOGS_LOG_FORMAT="%(name)-18s %(levelname)s %(message)s"
->>>>>>> Merge upstream
 #  - PYCRYPTO_VERSION=2.4.1
 #  - PYCRYPTO_VERSION=2.6.1
 
@@ -49,12 +45,9 @@ addons:
     - python-gst0.10
     #- python-matplotlib  # outdated: v1.1.1
     - python-mysqldb
-<<<<<<< 95d6d8029301c86a41b2865a024f0befe9d0ee66
     # required to build lxml
     - libxml2-dev
     - libxslt1-dev
-=======
->>>>>>> Merge upstream
     - python-numpy
     - python-pyodbc
     - python-qt4
