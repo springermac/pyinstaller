@@ -37,37 +37,37 @@ if root_dir:
     # Without them the django server won't run.
     package_name = os.path.basename(root_dir)
     hiddenimports += [
-            # TODO Consider including 'mysite.settings.py' in source code as a data files.
-            #      Since users might need to edit this file.
-            package_name + '.settings',
-            package_name + '.urls',
-            package_name + '.wsgi',
+        # TODO Consider including 'mysite.settings.py' in source code as a data files.
+        #      Since users might need to edit this file.
+        package_name + '.settings',
+        package_name + '.urls',
+        package_name + '.wsgi',
     ]
     # Include some hidden modules that are not imported directly in django.
     hiddenimports += [
-            'django.template.defaultfilters',
-            'django.template.defaulttags',
-            'django.template.loader_tags',
-            'django.template.context_processors',
+        'django.template.defaultfilters',
+        'django.template.defaulttags',
+        'django.template.loader_tags',
+        'django.template.context_processors',
     ]
     hiddenimports += collect_submodules('django.middleware')
     hiddenimports += collect_submodules('django.templatetags')
     # Other hidden imports to get Django example startproject working.
     hiddenimports += [
-            'django.contrib.messages.storage.fallback',
+        'django.contrib.messages.storage.fallback',
     ]
     # Django hiddenimports from the standard Python library.
     if sys.version_info.major == 3:
         # Python 3.x
         hiddenimports += [
-                'http.cookies',
-                'html.parser',
+            'http.cookies',
+            'html.parser',
         ]
     else:
         # Python 2.x
         hiddenimports += [
-                'Cookie',
-                'HTMLParser',
+            'Cookie',
+            'HTMLParser',
         ]
 
     # Include django data files - localizations, etc.
@@ -78,14 +78,14 @@ if root_dir:
     logger.info('Collecting Django migration scripts.')
     django_mod_dir = os.path.dirname(get_module_file_attribute('django'))
     migration_modules = [
-             'conf.app_template.migrations',
-             'contrib.admin.migrations',
-             'contrib.auth.migrations',
-             'contrib.contenttypes.migrations',
-             'contrib.flatpages.migrations',
-             'contrib.redirects.migrations',
-             'contrib.sessions.migrations',
-             'contrib.sites.migrations',
+        'conf.app_template.migrations',
+        'contrib.admin.migrations',
+        'contrib.auth.migrations',
+        'contrib.contenttypes.migrations',
+        'contrib.flatpages.migrations',
+        'contrib.redirects.migrations',
+        'contrib.sessions.migrations',
+        'contrib.sites.migrations',
     ]
     for mod in migration_modules:
         bundle_dir = mod.replace('.', os.sep)

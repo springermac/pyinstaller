@@ -74,8 +74,8 @@ def main(name, brief, debug, rec_debug, **unused_options):
             arg = arg.strip()
             try:
                 arch = get_archive(arg)
-            except NotAnArchiveError as e:
-                print(e)
+            except NotAnArchiveError as error:
+                print(error)
                 continue
             if arch is None:
                 print(arg, "not found")
@@ -110,8 +110,8 @@ def do_cleanup():
     for filename in cleanup:
         try:
             os.remove(filename)
-        except Exception as e:
-            print("couldn't delete", filename, e.args)
+        except Exception as error:
+            print("couldn't delete", filename, error.args)
     cleanup = []
 
 
@@ -135,7 +135,7 @@ def get_archive(name):
     except (ValueError, RuntimeError):
         ndx = parent.toc.find(name)
         dpos, dlen, ulen, flag, typcd, name = parent.toc[ndx]
-        x, data = parent.extract(ndx)
+        pkg, data = parent.extract(ndx)
         tempfilename = tempfile.mktemp()
         cleanup.append(tempfilename)
         open(tempfilename, 'wb').write(data)
@@ -155,7 +155,7 @@ def get_data(name, arch):
             return zlib.decompress(arch.lib.read(length))
     ndx = arch.toc.find(name)
     dpos, dlen, ulen, flag, typcd, name = arch.toc[ndx]
-    x, data = arch.extract(ndx)
+    pkg, data = arch.extract(ndx)
     return data
 
 
@@ -218,9 +218,10 @@ def get_archive_content(filename):
 class ZlibArchive(pyimod02_archive.ZlibArchiveReader):
 
     def checkmagic(self):
-        """ Overridable.
-            Check to see if the file object self.lib actually has a file
-            we understand.
+        """
+        Check to see if the file object self.lib actually has a file we understand.
+
+        Overridable.
         """
         self.lib.seek(self.start)  # default - magic is at start of file.
         if self.lib.read(len(self.MAGIC)) != self.MAGIC:

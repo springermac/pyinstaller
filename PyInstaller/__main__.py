@@ -8,9 +8,7 @@
 # ----------------------------------------------------------------------------
 
 
-"""
-Main command-line interface to PyInstaller.
-"""
+"""Main command-line interface to PyInstaller."""
 
 import os
 import argparse
@@ -34,8 +32,8 @@ def run_makespec(filenames, **opts):
     # Split pathex by using the path separator
     temppaths = opts['pathex'][:]
     pathex = opts['pathex'] = []
-    for p in temppaths:
-        pathex.extend(p.split(os.pathsep))
+    for path in temppaths:
+        pathex.extend(path.split(os.pathsep))
 
     spec_file = PyInstaller.building.makespec.main(filenames, **opts)
     logger.info('wrote %s', spec_file)
@@ -78,9 +76,9 @@ def run(pyi_args=None, pyi_config=None):
         # as the first line to stdout.
         # This helps identify PyInstaller, Python and platform version
         #  when users report issues.
-        logger.info('PyInstaller: %s' % __version__)
-        logger.info('Python: %s' % platform.python_version())
-        logger.info('Platform: %s' % platform.platform())
+        logger.info('PyInstaller: %s', __version__)
+        logger.info('Python: %s', platform.python_version())
+        logger.info('Platform: %s', platform.platform())
 
         # Skip creating .spec when .spec file is supplied
         if args.filenames[0].endswith('.spec'):

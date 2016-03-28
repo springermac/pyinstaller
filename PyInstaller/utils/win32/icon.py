@@ -30,8 +30,8 @@ class Structure:
         size = self._sizeInBytes = struct.calcsize(self._format_)
         self._fields_ = list(struct.unpack(self._format_, b'\000' * size))
         indexes = self._indexes_ = {}
-        for i, nm in enumerate(self._names_):
-            indexes[nm] = i
+        for i, name in enumerate(self._names_):
+            indexes[name] = i
 
     def dump(self):
         logger.info("DUMP of %s", self)
@@ -109,8 +109,8 @@ class IconFile:
         data = b''
         for entry in self.entries:
             e = GRPICONDIRENTRY()
-            for n in e._names_[:-1]:
-                setattr(e, n, getattr(entry, n))
+            for name in e._names_[:-1]:
+                setattr(e, name, getattr(entry, name))
             e.nID = id
             id += 1
             data = data + e.tostring()
