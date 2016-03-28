@@ -275,7 +275,7 @@ def __scan_code_instruction_for_ctypes(co, instructions):
         op, oparg, conditional, curline = next(instructions)
         if op == LOAD_ATTR:
             if co.co_names[oparg] == "find_library":
-                libname = _libFromConst()
+                libname = _lib_from_const()
                 if libname:
                     return ctypes.util.find_library(libname)
 
