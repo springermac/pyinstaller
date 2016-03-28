@@ -102,8 +102,8 @@ class DependencyProcessor(object):
         toc = TOC((x, y, 'DATA') for x, y in self._datas)
         for dist in self._distributions:
             if (dist._pyinstaller_info['egg'] and
-                not dist._pyinstaller_info['zipped'] and
-                not dist._pyinstaller_info['zip-safe']):
+                    not dist._pyinstaller_info['zipped'] and
+                    not dist._pyinstaller_info['zip-safe']):
                 # this is a un-zipped, not-zip-safe egg
                 toplevel = dist.get_metadata('top_level.txt').strip()
                 basedir = dist.location
@@ -119,7 +119,7 @@ class DependencyProcessor(object):
         toc = []
         for dist in self._distributions:
             if (dist._pyinstaller_info['zipped'] and
-                not dist._pyinstaller_info['egg']):
+                    not dist._pyinstaller_info['egg']):
                 # Hmm, this should never happen as normal zip-files
                 # are not associated with an distribution, are they?
                 toc.append(("eggs/" + os.path.basename(dist.location),
