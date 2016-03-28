@@ -33,23 +33,23 @@ def pre_safe_import_module(api):
     # Dictionary from conventional module names to "six.moves" attribute names
     # (e.g., from `tkinter.tix` to `six.moves.tkinter_tix`).
     real_to_six_module_name = eval_statement(
-'''
-import six
-print('{')
+        '''
+            import six
+            print('{')
 
-# Iterate over the "six._moved_attributes" list rather than the
-# "six._importer.known_modules" dictionary, as "urllib"-specific moved modules
-# are overwritten in the latter with unhelpful "LazyModule" objects.
-for moved_module in six._moved_attributes:
-    # If this is a moved module or attribute, map the corresponding module. In
-    # the case of moved attributes, the attribute's module is mapped while the
-    # attribute itself is mapped at runtime and hence ignored here.
-    if isinstance(moved_module, (six.MovedModule, six.MovedAttribute)):
-        print('  %r: %r,' % (
-            moved_module.mod, 'six.moves.' + moved_module.name))
+            # Iterate over the "six._moved_attributes" list rather than the
+            # "six._importer.known_modules" dictionary, as "urllib"-specific moved modules
+            # are overwritten in the latter with unhelpful "LazyModule" objects.
+            for moved_module in six._moved_attributes:
+                # If this is a moved module or attribute, map the corresponding module. In
+                # the case of moved attributes, the attribute's module is mapped while the
+                # attribute itself is mapped at runtime and hence ignored here.
+                if isinstance(moved_module, (six.MovedModule, six.MovedAttribute)):
+                    print('  %r: %r,' % (
+                        moved_module.mod, 'six.moves.' + moved_module.name))
 
-print('}')
-''')
+            print('}')
+        ''')
 
     api.add_runtime_module(api.module_name)
     for real_module_name, six_module_name in real_to_six_module_name.items():

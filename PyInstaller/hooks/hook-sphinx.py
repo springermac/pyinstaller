@@ -69,7 +69,7 @@ hiddenimports = (
 #    locale = __import__('locale')  # due to submodule of the same name
 #
 # Add these two modules.
-                  ['inspect', 'locale'] )
+                  ['inspect', 'locale'])
 
 # Sphinx also relies on a number of data files in its directory hierarchy: for
 # example, *.html and *.conf files in sphinx.themes, translation files in

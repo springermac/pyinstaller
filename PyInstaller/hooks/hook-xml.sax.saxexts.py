@@ -20,4 +20,4 @@ hiddenimports = ["xml.sax.drivers2.drv_pyexpat",
                  'xml.sax.drivers.drv_htmllib',
                  'xml.sax.drivers.drv_sgmlop',
                  "xml.sax.drivers.drv_sgmllib",
-            ]
+                 ]

@@ -8,4 +8,4 @@
 # ----------------------------------------------------------------------------
 
 
-hiddenimports = ['xml.sax.xmlreader','xml.sax.expatreader']
+hiddenimports = ['xml.sax.xmlreader', 'xml.sax.expatreader']

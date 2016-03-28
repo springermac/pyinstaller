@@ -169,7 +169,7 @@ print(list(diff))
     if not module_imports:
         logger.error('Cannot find imports for module %s' % modname)
         return []  # Means no imports found or looking for imports failed.
-    #module_imports = filter(lambda x: not x.startswith('distutils'), module_imports)
+    # module_imports = filter(lambda x: not x.startswith('distutils'), module_imports)
     return module_imports
 
 
@@ -282,15 +282,18 @@ def qt_menu_nib_dir(namespace):
             """.format(namespace, path))
     return menu_dir
 
-def get_homebrew_path(formula = ''):
-    '''Return the homebrew path to the requested formula, or the global prefix when
-       called with no argument.  Returns the path as a string or None if not found.'''
+
+def get_homebrew_path(formula=''):
+    """
+    Return the homebrew path to the requested formula, or the global prefix when
+    called with no argument.  Returns the path as a string or None if not found.
+    """
     import subprocess
-    brewcmd = ['brew','--prefix']
+    brewcmd = ['brew', '--prefix']
     path = None
     if formula:
         brewcmd.append(formula)
-        dbgstr = 'homebrew formula "%s"' %formula
+        dbgstr = 'homebrew formula "%s"' % formula
     else:
         dbgstr = 'homebrew prefix'
     try:
@@ -307,26 +310,27 @@ def get_homebrew_path(formula = ''):
     else:
         return None
 
-def get_qmake_path(version = ''):
-    '''
+
+def get_qmake_path(version=''):
+    """
     Try to find the path to qmake with version given by the argument
     as a string.
-    '''
+    """
     import subprocess
 
     # Use QT[45]DIR if specified in the environment
     if 'QT5DIR' in os.environ and version[0] == '5':
         logger.debug('Using $QT5DIR/bin as qmake path')
-        return os.path.join(os.environ['QT5DIR'],'bin','qmake')
+        return os.path.join(os.environ['QT5DIR'], 'bin', 'qmake')
     if 'QT4DIR' in os.environ and version[0] == '4':
         logger.debug('Using $QT4DIR/bin as qmake path')
-        return os.path.join(os.environ['QT4DIR'],'bin','qmake')
+        return os.path.join(os.environ['QT4DIR'], 'bin', 'qmake')
 
     # try the default $PATH
     dirs = ['']
 
     # try homebrew paths
-    for formula in ('qt','qt5'):
+    for formula in ('qt', 'qt5'):
         homebrewqtpath = get_homebrew_path(formula)
         if homebrewqtpath:
             dirs.append(homebrewqtpath)
@@ -358,8 +362,8 @@ def qt5_qml_dir():
     else:
         qmldir = compat.exec_command(qmake, "-query", "QT_INSTALL_QML").strip()
     if len(qmldir) == 0:
-        logger.error('Cannot find QT_INSTALL_QML directory, "qmake -query '
-                        + 'QT_INSTALL_QML" returned nothing')
+        logger.error('Cannot find QT_INSTALL_QML directory, "qmake -query ' +
+                     'QT_INSTALL_QML" returned nothing')
     elif not os.path.exists(qmldir):
         logger.error("Directory QT_INSTALL_QML: %s doesn't exist" % qmldir)
 
@@ -367,10 +371,12 @@ def qt5_qml_dir():
     qmldir = os.path.normpath(qmldir)
     return qmldir
 
+
 def qt5_qml_data(dir):
     """Return Qml library dir formatted for data"""
     qmldir = qt5_qml_dir()
-    return (os.path.join(qmldir, dir), 'qml')
+    return os.path.join(qmldir, dir), 'qml'
+
 
 def qt5_qml_plugins_binaries(dir):
     """Return list of dynamic libraries formatted for mod.binaries."""
@@ -382,7 +388,7 @@ def qt5_qml_plugins_binaries(dir):
         instdir, file = os.path.split(relpath)
         instdir = os.path.join("qml", instdir)
         logger.debug("qt5_qml_plugins_binaries installing %s in %s"
-                     % (f, instdir) )
+                     % (f, instdir))
         binaries.append((f, instdir))
     return binaries
 
@@ -633,7 +639,7 @@ print(module.__file__)
 
 
 def is_module_satisfies(
-    requirements, version=None, version_attr='__version__'):
+        requirements, version=None, version_attr='__version__'):
     """
     `True` if the module, package, or C extension described by the passed
     requirements string both exists and satisfies these requirements.
@@ -887,7 +893,7 @@ def collect_submodules(package, subdir=None, pattern=None, endswith=False):
             for f in filenames:
                 extension = os.path.splitext(f)[1]
                 if ((remove_file_extension(f) != '__init__') and
-                    extension in PY_EXECUTABLE_SUFFIXES):
+                        extension in PY_EXECUTABLE_SUFFIXES):
                     modname = mod_path + "." + remove_file_extension(f)
                     # TODO convert this into regex matching.
                     # Skip submodules not matching pattern.
@@ -983,7 +989,7 @@ def collect_data_files(package, include_py_files=False, subdir=None):
     for dirpath, dirnames, files in os.walk(pkg_dir):
         for f in files:
             extension = os.path.splitext(f)[1]
-            if include_py_files or (not extension in PY_IGNORE_EXTENSIONS):
+            if include_py_files or (extension not in PY_IGNORE_EXTENSIONS):
                 # Produce the tuple
                 # (/abs/path/to/source/mod/submod/file.dat,
                 #  mod/submod/file.dat)
@@ -993,6 +999,7 @@ def collect_data_files(package, include_py_files=False, subdir=None):
                 datas.append((source, dest))
 
     return datas
+
 
 def collect_system_data_files(path, destdir=None, include_py_files=False):
     """
@@ -1012,7 +1019,7 @@ def collect_system_data_files(path, destdir=None, include_py_files=False):
     for dirpath, dirnames, files in os.walk(path):
         for f in files:
             extension = os.path.splitext(f)[1]
-            if include_py_files or (not extension in PY_IGNORE_EXTENSIONS):
+            if include_py_files or (extension not in PY_IGNORE_EXTENSIONS):
                 # Produce the tuple
                 # (/abs/path/to/source/mod/submod/file.dat,
                 #  mod/submod/file.dat)
@@ -1044,6 +1051,7 @@ def _find_prefix(filename):
     possible_prefixes.sort(key=lambda p: len(p), reverse=True)
     return possible_prefixes[0]
 
+
 def relpath_to_config_or_make(filename):
     """
     The following is refactored out of hook-sysconfig and hook-distutils,
@@ -1060,6 +1068,7 @@ def get_typelibs(module, version):
     '''deprecated; only here for backwards compat'''
     logger.warn("get_typelibs is deprecated, use get_gi_typelibs instead")
     return get_gi_typelibs(module, version)[1]
+
 
 def get_gi_libdir(module, version):
     statement = """
@@ -1079,6 +1088,7 @@ print(repo.get_shared_library(module))
         return os.path.normpath(os.path.dirname(path))
 
     raise ValueError("Could not find libdir for %s-%s" % (module, version))
+
 
 def get_gi_typelibs(module, version):
     """
@@ -1186,7 +1196,8 @@ def gir_library_path_fix(path):
 
         return os.path.join(CONF['workpath'], typelib_name), 'gi_typelibs'
     else:
-        return (path, 'gi_typelibs')
+        return path, 'gi_typelibs'
+
 
 def get_glib_system_data_dirs():
     statement = """
@@ -1203,8 +1214,9 @@ print(GLib.get_system_data_dirs())
         # :todo: should we raise a SystemError here?
     return data_dirs
 
+
 def get_glib_sysconf_dirs():
-    '''Tries to return the sysconf directories, eg /etc'''
+    """Tries to return the sysconf directories, eg /etc"""
 
     if is_win:
         # On windows, if you look at gtkwin32.c, sysconfdir is actually
@@ -1227,10 +1239,11 @@ print(GLib.get_system_config_dirs())
         # :todo: should we raise a SystemError here?
     return data_dirs
 
+
 def collect_glib_share_files(*path):
-    '''path is relative to the system data directory (eg, /usr/share)'''
+    """path is relative to the system data directory (eg, /usr/share)"""
     glib_data_dirs = get_glib_system_data_dirs()
-    if glib_data_dirs == None:
+    if glib_data_dirs is None:
         return []
 
     destdir = os.path.join('share', *path[:-1])
@@ -1243,10 +1256,11 @@ def collect_glib_share_files(*path):
 
     return collected
 
+
 def collect_glib_etc_files(*path):
-    '''path is relative to the system config directory (eg, /etc)'''
+    """path is relative to the system config directory (eg, /etc)"""
     glib_config_dirs = get_glib_sysconf_dirs()
-    if glib_config_dirs == None:
+    if glib_config_dirs is None:
         return []
 
     destdir = os.path.join('etc', *path[:-1])
@@ -1260,6 +1274,7 @@ def collect_glib_etc_files(*path):
     return collected
 
 _glib_translations = None
+
 
 def collect_glib_translations(prog):
     """
@@ -1276,6 +1291,7 @@ def collect_glib_translations(prog):
     namelen = len(names[0])
 
     return [(src, dst) for src, dst in _glib_translations if src[-namelen:] in names]
+
 
 def copy_metadata(package_name):
     """
@@ -1342,4 +1358,4 @@ def copy_metadata(package_name):
     logger.debug('Package {} metadata found in {} belongs in {}'.format(
       package_name, metadata_dir, dest_dir))
 
-    return [ (metadata_dir, dest_dir) ]
+    return [(metadata_dir, dest_dir)]

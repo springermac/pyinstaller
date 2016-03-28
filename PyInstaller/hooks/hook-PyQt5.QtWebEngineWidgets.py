@@ -31,19 +31,18 @@ if qmake:
 
     if compat.is_darwin:
         binaries = [
-            (os.path.join(libdir, 'QtWebEngineCore.framework', 'Versions', '5',\
+            (os.path.join(libdir, 'QtWebEngineCore.framework', 'Versions', '5',
                           'Helpers', 'QtWebEngineProcess.app', 'Contents', 'MacOS', 'QtWebEngineProcess'),
              os.path.join('QtWebEngineProcess.app', 'Contents', 'MacOS'))
         ]
 
         resources_dir = os.path.join(libdir, 'QtWebEngineCore.framework', 'Versions', '5', 'Resources')
         datas = [
-            (os.path.join(resources_dir, 'icudtl.dat'),''),
+            (os.path.join(resources_dir, 'icudtl.dat'), ''),
             (os.path.join(resources_dir, 'qtwebengine_resources.pak'), ''),
             # The distributed Info.plist has LSUIElement set to true, which prevents the
             # icon from appearing in the dock. 
-            (os.path.join(libdir, 'QtWebEngineCore.framework', 'Versions', '5',\
-                           'Helpers', 'QtWebEngineProcess.app', 'Contents', 'Info.plist'),
-                     os.path.join('QtWebEngineProcess.app', 'Contents'))
+            (os.path.join(libdir, 'QtWebEngineCore.framework', 'Versions', '5',
+                          'Helpers', 'QtWebEngineProcess.app', 'Contents', 'Info.plist'),
+                os.path.join('QtWebEngineProcess.app', 'Contents'))
         ]
-        

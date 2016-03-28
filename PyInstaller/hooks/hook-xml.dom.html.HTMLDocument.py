@@ -62,4 +62,4 @@ hiddenimports = ['xml.dom.html.HTMLAnchorElement',
                  'xml.dom.html.HTMLTextAreaElement',
                  'xml.dom.html.HTMLTitleElement',
                  'xml.dom.html.HTMLUListElement',
-        ]
+                 ]
