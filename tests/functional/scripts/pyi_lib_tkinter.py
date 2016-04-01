@@ -44,5 +44,5 @@ tcl_dir = os.environ['TCL_LIBRARY']
 tk_dir = os.environ['TK_LIBRARY']
 
 
-compare('Tcl', os.path.join(sys.prefix, 'tcl'), tcl_dir)
-compare('Tk', os.path.join(sys.prefix, 'tk'), tk_dir)
+compare('Tcl', os.path.join(sys.prefix, 'tcl_data'), tcl_dir)
+compare('Tk', os.path.join(sys.prefix, 'tk_data'), tk_dir)
