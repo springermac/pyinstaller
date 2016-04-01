@@ -317,3 +317,9 @@ def mac_set_relative_dylib_deps(libname, distname):
         f.close()
     except Exception:
         pass
+
+    dll = MachO(libname)
+    logger.debug(dll.filename)
+    for h in dll.headers:
+        for r in h.walkRelocatables():
+            logger.debug(r)

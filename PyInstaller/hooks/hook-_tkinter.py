@@ -116,10 +116,10 @@ def _find_tcl_tk_darwin_frameworks(binaries):
     """
     tcl_root = tk_root = None
     for nm, fnm in binaries:
-        if nm == 'Tcl_binary':
+        if nm == 'Tcl':
             tcl_root = os.path.join(os.path.dirname(fnm), 'Resources/Scripts')
-        elif nm == 'Tk_binary':
             tk_root =  os.path.join(os.path.dirname(fnm), 'Resources/Scripts')
+        elif nm == 'Tk':
     return tcl_root, tk_root
 
 
@@ -174,10 +174,9 @@ def _find_tcl_tk(hook_api):
             for l in bins:
                 mapping[os.path.basename(l)] = l
             bins = [
-                ('Tcl_binary', mapping['Tcl']),
-                ('Tk_binary', mapping['Tk']),
+                ('Tcl', mapping['Tcl']),
+                ('Tk', mapping['Tk']),
             ]
-            hook_api.add_binaries(bins)
 
         # _tkinter depends on Tcl/Tk compiled as frameworks.
         path_to_tcl = bins[0][1]
