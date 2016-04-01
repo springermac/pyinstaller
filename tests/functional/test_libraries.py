@@ -112,12 +112,10 @@ def test_gevent_monkey(pyi_builder):
         """)
 
 
-@xfail(is_darwin, reason='Issue #1895.')
 def test_tkinter(pyi_builder):
     pyi_builder.test_script('pyi_lib_tkinter.py')
 
 
-@xfail(is_darwin, reason='Issue #1895.')
 @importorskip('FixTk')
 def test_tkinter_FixTk(pyi_builder):
     # check if Tkinter includes FixTk
@@ -578,7 +576,6 @@ def test_pil_img_conversion(pyi_builder_spec):
     pyi_builder_spec.test_spec('pyi_lib_PIL_img_conversion.spec')
 
 
-@xfail(is_darwin, reason='Issue #1895.')
 @importorskip('PIL')
 @importorskip('FixTk')
 def test_pil_FixTk(pyi_builder):

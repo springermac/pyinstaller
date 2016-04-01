@@ -507,7 +507,9 @@ def selectImports(pth, xtrapath=None):
 
         if not dylib.include_library(candidatelib):
             if (candidatelib.find('libpython') < 0 and
-               candidatelib.find('Python.framework') < 0):
+                candidatelib.find('Python.framework') < 0) or \
+                candidatelib.find('Tcl.framework') < 0 or \
+                    candidatelib.find('Tk.framework'):
                 # skip libs not containing (libpython or Python.framework)
                 if npth.upper() not in seen:
                     logger.debug("Skipping %s dependency of %s",

@@ -177,6 +177,7 @@ def _find_tcl_tk(hook_api):
                 ('Tcl', mapping['Tcl']),
                 ('Tk', mapping['Tk']),
             ]
+            hook_api.add_binaries(bins)
 
         # _tkinter depends on Tcl/Tk compiled as frameworks.
         path_to_tcl = bins[0][1]
