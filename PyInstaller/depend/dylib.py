@@ -303,6 +303,10 @@ def mac_set_relative_dylib_deps(libname, distname):
 
     # Rewrite mach headers with @loader_path.
     dll = MachO(libname)
+    logger.debug(dll.filename)
+    for h in dll.headers:
+        for r in h.walkRelocatables():
+            logger.debug('Before: %s', r)
     dll.rewriteLoadCommands(match_func)
 
     # Write changes into file.
@@ -319,7 +323,6 @@ def mac_set_relative_dylib_deps(libname, distname):
         pass
 
     dll = MachO(libname)
-    logger.debug(dll.filename)
     for h in dll.headers:
         for r in h.walkRelocatables():
-            logger.debug(r)
+            logger.debug('After: %s', r)
