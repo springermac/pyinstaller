@@ -118,8 +118,8 @@ def _find_tcl_tk_darwin_frameworks(binaries):
     for nm, fnm in binaries:
         if nm == 'Tcl':
             tcl_root = os.path.join(os.path.dirname(fnm), 'Resources/Scripts')
-            tk_root =  os.path.join(os.path.dirname(fnm), 'Resources/Scripts')
         elif nm == 'Tk':
+            tk_root = os.path.join(os.path.dirname(fnm), 'Resources/Scripts')
     return tcl_root, tk_root
 
 
