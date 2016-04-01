@@ -21,8 +21,8 @@ except NameError:
     # terminates when this exception occurs.
     FileNotFoundError = IOError
 
-tcldir = os.path.join(sys._MEIPASS, 'tcl_data')
-tkdir = os.path.join(sys._MEIPASS, 'tk_data')
+tcldir = os.path.join(sys._MEIPASS, 'tcl')
+tkdir = os.path.join(sys._MEIPASS, 'tk')
 
 if not os.path.isdir(tcldir):
     raise FileNotFoundError('Tcl data directory "%s" not found.' % (tcldir))

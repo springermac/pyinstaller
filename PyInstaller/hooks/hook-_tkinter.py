@@ -116,10 +116,10 @@ def _find_tcl_tk_darwin_frameworks(binaries):
     """
     tcl_root = tk_root = None
     for nm, fnm in binaries:
-        if nm == 'Tcl':
+        if nm == 'Tcl_binary':
             tcl_root = os.path.join(os.path.dirname(fnm), 'Resources/Scripts')
-        elif nm == 'Tk':
             tk_root =  os.path.join(os.path.dirname(fnm), 'Resources/Scripts')
+        elif nm == 'Tk_binary':
     return tcl_root, tk_root
 
 
@@ -174,8 +174,8 @@ def _find_tcl_tk(hook_api):
             for l in bins:
                 mapping[os.path.basename(l)] = l
             bins = [
-                ('Tcl', mapping['Tcl']),
-                ('Tk', mapping['Tk']),
+                ('Tcl_binary', mapping['Tcl']),
+                ('Tk_binary', mapping['Tk']),
             ]
             hook_api.add_binaries(bins)
 
@@ -220,9 +220,9 @@ def _collect_tcl_tk_files(hook_api):
         return []
 
     tcltree = Tree(
-        tcl_root, prefix='tcl_data', excludes=['demos', '*.lib', 'tclConfig.sh'])
+        tcl_root, prefix='tcl', excludes=['demos', '*.lib', 'tclConfig.sh'])
     tktree = Tree(
-        tk_root, prefix='tk_data', excludes=['demos', '*.lib', 'tkConfig.sh'])
+        tk_root, prefix='tk', excludes=['demos', '*.lib', 'tkConfig.sh'])
 
     # If the current Tcl installation is a Teapot-distributed version of
     # ActiveTcl and the current platform is OS X, warn that this is bad.
