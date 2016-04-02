@@ -300,9 +300,13 @@ def mac_set_relative_dylib_deps(libname, distname):
             # installed. The loader will fall back to /System/Frameworks if the library doesn't exist in
             # /Library/Frameworks. Allow that to happen by not rewriting the library path if we can't find the library
             # in /Library/Frameworks.
-            if pth.startswith('/Library/Frameworks') and not os.path.exists(pth) and\
-                    os.path.exists(os.path.join('System', pth)):
-                return pth
+            if pth.startswith('/Library/Frameworks/'):
+                logger.debug('In %s', pth)
+                if not os.path.exists(pth):
+                    logger.debug('Exists in %s', pth)
+                    if os.path.exists(os.path.join('System', pth)):
+                        logger.debug('Exists in %s', os.path.join('System', pth))
+                        return pth
             # Use relative path to dependent dynamic libraries bases on
             # location of the executable.
             return os.path.join('@loader_path', parent_dir,
