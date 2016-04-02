@@ -17,7 +17,7 @@ import os
 # -------------
 import sys
 
-from PyInstaller.compat import is_win, is_py3, is_py36, is_darwin
+from PyInstaller.compat import is_win, is_py3, is_py36, is_darwin, modname_tkinter
 from PyInstaller.utils.hooks import get_module_attribute, is_module_satisfies
 from PyInstaller.utils.tests import importorskip, xfail, skipif
 
@@ -112,6 +112,7 @@ def test_gevent_monkey(pyi_builder):
         """)
 
 
+@importorskip(modname_tkinter)
 def test_tkinter(pyi_builder):
     pyi_builder.test_script('pyi_lib_tkinter.py')
 
