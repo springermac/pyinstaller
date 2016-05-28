@@ -6,7 +6,6 @@
 
 # Prohibit "gevent" wheels, which cause py.test to crash on Travis under OS X.
 --no-binary gevent
---only-binary lxml
 --only-binary pandas
 --only-binary scipy
 
