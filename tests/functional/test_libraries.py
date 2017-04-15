@@ -75,11 +75,13 @@ def test_enchant(pyi_builder):
 
 
 @skipif(is_py3, reason="Only tests Python 2.7 feature")
+@importorskip('future')
 def test_future(pyi_builder):
     pyi_builder.test_script('pyi_future.py')
 
 
 @skipif(is_py3, reason="Only tests Python 2.7 feature")
+@importorskip('future')
 def test_future_queue(pyi_builder):
     pyi_builder.test_source(
         """
