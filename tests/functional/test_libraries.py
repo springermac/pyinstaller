@@ -36,7 +36,6 @@ def test_boto(pyi_builder):
     pyi_builder.test_script('pyi_lib_boto.py')
 
 
-@xfail(reason='Issue #1844.')
 @importorskip('boto3')
 def test_boto3(pyi_builder):
     pyi_builder.test_source(
@@ -54,7 +53,6 @@ def test_boto3(pyi_builder):
         """)
 
 
-@xfail(reason='Issue #1844.')
 @importorskip('botocore')
 def test_botocore(pyi_builder):
     pyi_builder.test_source(
