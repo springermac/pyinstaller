@@ -16,7 +16,6 @@ from PyInstaller.utils.tests import importorskip, skip, xfail
 
 
 @xfail(is_win, reason='Issue scipy/scipy#5461.')
-@xfail(is_darwin, reason='Issue #1895.')
 @importorskip('scipy')
 def test_scipy(pyi_builder):
     pyi_builder.test_source(
@@ -46,7 +45,6 @@ def test_scipy(pyi_builder):
 
 
 @xfail(is_win, reason='Issue scipy/scipy#5461.')
-@xfail(is_darwin, reason='Issue #1895.')
 @importorskip('scipy')
 def test_scipy_special(pyi_builder):
     """
