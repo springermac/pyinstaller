@@ -176,8 +176,8 @@ on_finish:
   #- ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
 
 on_failure:
-  - robocopy /E C:\Users\appveyor\AppData\Local\Temp\1\pytest-of-appveyor\pytest-0\test_zmq_onefile_0 test_zmq_onefile
-  - robocopy /E C:\Users\appveyor\AppData\Local\Temp\1\pytest-of-appveyor\pytest-0\test_zmq_onedir_0 test_zmq_onedir
+  - robocopy /E /np C:\Users\appveyor\AppData\Local\Temp\1\pytest-of-appveyor\pytest-0\test_zmq_onefile_0 test_zmq_onefile
+  - robocopy /E /np C:\Users\appveyor\AppData\Local\Temp\1\pytest-of-appveyor\pytest-0\test_zmq_onedir_0 test_zmq_onedir
 
 artifacts:
   - path: test_zmq_onefile
