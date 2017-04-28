@@ -508,6 +508,15 @@ def pyi_builder(tmpdir, monkeypatch, request, pyi_modgraph):
     except AttributeError:
         pass
 
+    if is_darwin or is_linux:
+        request.addfinalizer(del_temp_dir)
+    if is_win and os.environ['APPVEYOR']:
+        if request.node.rep_setup.passed:
+            if not request.node.rep_call.passed:
+                args = ['appveyor', 'PushArtifact', tmp]
+                psutil.Popen(args)
+    return AppBuilder(tmp, request.param, pyi_modgraph)
+
 
 # Fixture for .spec based tests.
 # With .spec it does not make sense to differentiate onefile/onedir mode.
