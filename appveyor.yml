@@ -175,8 +175,12 @@ on_finish:
   # is deleted. See https://www.appveyor.com/docs/how-to/rdp-to-build-worker/.
   #- ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
 
+on_failure:
+  - robocopy /E C:\Users\appveyor\AppData\Local\Temp\1\pytest-of-appveyor\pytest-0\test_zmq_onefile_0 test_zmq_onefile
+  - robocopy /E C:\Users\appveyor\AppData\Local\Temp\1\pytest-of-appveyor\pytest-0\test_zmq_onedir_0 test_zmq_onedir
+
 artifacts:
-  - path: ..\..\Users\appveyor\AppData\Local\Temp\1\pytest-of-appveyor\pytest-0\test_zmq_onefile_0
+  - path: test_zmq_onefile
     name: zmq_onefile
-  - path: ..\..\Users\appveyor\AppData\Local\Temp\1\pytest-of-appveyor\pytest-0\test_zmq_onedir_0
+  - path: test_zmq_onedir
     name: zmq_onedir
