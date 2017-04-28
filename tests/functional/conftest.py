@@ -514,7 +514,8 @@ def pyi_builder(tmpdir, monkeypatch, request, pyi_modgraph):
         if hasattr(request.node, 'rep_setup') and request.node.rep_setup.passed:
             if hasattr(request.node, 'rep_call') and not request.node.rep_call.passed:
                 args = ['appveyor', 'PushArtifact', tmp]
-                psutil.Popen(args)
+                print(args)
+                psutil.Popen(args, stdout=sys.stdout, stderr=sys.stderr)
     return AppBuilder(tmp, request.param, pyi_modgraph)
 
 
