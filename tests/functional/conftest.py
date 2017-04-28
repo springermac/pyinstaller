@@ -511,8 +511,8 @@ def pyi_builder(tmpdir, monkeypatch, request, pyi_modgraph):
     if is_darwin or is_linux:
         request.addfinalizer(del_temp_dir)
     if is_win and os.environ['APPVEYOR']:
-        if getattr(request.node, 'rep_setup') and request.node.rep_setup.passed:
-            if getattr(request.node, 'rep_call') and not request.node.rep_call.passed:
+        if hasattr(request.node, 'rep_setup') and request.node.rep_setup.passed:
+            if hasattr(request.node, 'rep_call') and not request.node.rep_call.passed:
                 args = ['appveyor', 'PushArtifact', tmp]
                 psutil.Popen(args)
     return AppBuilder(tmp, request.param, pyi_modgraph)
