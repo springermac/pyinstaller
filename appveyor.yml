@@ -165,10 +165,10 @@ on_finish:
   - C:\cygwin\bin\find "%LOCALAPPDATA%\pip" -empty -delete
   # Show size of cache
   - C:\cygwin\bin\du -hs "%LOCALAPPDATA%\pip\Cache"
-  - 7z a test_zmq_onefile.zip C:\Users\appveyor\AppData\Local\Temp\1\pytest-of-appveyor\pytest-0\test_zmq_onefile_0
-  - appveyor PushArtifact test_zmq_onefile.zip
-  - 7z a test_zmq_onedir.zip C:\Users\appveyor\AppData\Local\Temp\1\pytest-of-appveyor\pytest-0\test_zmq_onedir_0
-  - appveyor PushArtifact test_zmq_onedir.zip
+#  - 7z a test_zmq_onefile.zip C:\Users\appveyor\AppData\Local\Temp\1\pytest-of-appveyor\pytest-0\test_zmq_onefile_0
+#  - appveyor PushArtifact test_zmq_onefile.zip
+#  - 7z a test_zmq_onedir.zip C:\Users\appveyor\AppData\Local\Temp\1\pytest-of-appveyor\pytest-0\test_zmq_onedir_0
+#  - appveyor PushArtifact test_zmq_onedir.zip
 
   - ps: |
       (new-object net.webclient).UploadFile(

@@ -513,7 +513,9 @@ def pyi_builder(tmpdir, monkeypatch, request, pyi_modgraph):
     if is_win and os.environ['APPVEYOR']:
         if hasattr(request.node, 'rep_setup') and request.node.rep_setup.passed:
             if hasattr(request.node, 'rep_call') and not request.node.rep_call.passed:
-                args = ['appveyor', 'PushArtifact', tmp]
+                archive_name = tmp.split(os.path.sep)[-1]
+                archive = shutil.make_archive(archive_name, 'zip', tmp)
+                args = ['appveyor', 'PushArtifact', archive]
                 print(args)
                 psutil.Popen(args, stdout=sys.stdout, stderr=sys.stderr)
     return AppBuilder(tmp, request.param, pyi_modgraph)
