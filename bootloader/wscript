@@ -435,6 +435,7 @@ def configure(ctx):
         else:
             # Include gcc debugging information for debugging in GDB.
             ctx.env.append_value('CFLAGS', '-g')
+            ctx.env.append_value('LINKFLAGS', '-g')
     else:
         if ctx.env.DEST_OS != 'sunos':
             ctx.env.append_value('CFLAGS', '-O2')
@@ -626,7 +627,7 @@ def configure(ctx):
     if ctx.env.DEST_OS == 'linux' and ctx.check_cc(cflags='-Wl,--as-needed'):
         ctx.env.append_value('LINKFLAGS', '-Wl,--as-needed')
 
-    if ctx.env.CC_NAME != 'msvc':
+    if ctx.env.CC_NAME != 'msvc' and not ctx.options.debug:
         # This tool allows reducing the size of executables.
         ctx.find_program([assoc_programm(ctx, 'strip')], var='STRIP')
         ctx.load('strip', tooldir='tools')
@@ -713,8 +714,8 @@ def build(ctx):
 
     # By default strip final executables to make them smaller.
     features = 'strip'
-    if ctx.env.CC_NAME == 'msvc':
-        # Do not strip bootloaders when using MSVC.
+    if ctx.env.CC_NAME == 'msvc' or ctx.options.debug:
+        # Do not strip bootloaders when using MSVC or debug option.
         features = ''
 
     if ctx.env.DEST_OS == 'win32':
