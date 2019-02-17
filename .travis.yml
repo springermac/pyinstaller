@@ -37,6 +37,7 @@ jobs:
       cache:
         directories:
           - $HOME/Library/Caches/pip
+          - $HOME/Library/Caches/Homebrew
       # Define the ``before_install-osx`` `node anchor
       # <https://yaml.org/spec/1.2/spec.html#id2785586>`_, so the contents of
       # the ``script`` node can be re-used.
@@ -67,6 +68,7 @@ jobs:
       cache:
         directories:
           - $HOME/Library/Caches/pip
+          - $HOME/Library/Caches/Homebrew
       # Insert the earlier defined ``before_install-osx`` node anchor contents
       # by referencing it with an `alias node
       # <https://yaml.org/spec/1.2/spec.html#id2786196>`_.
