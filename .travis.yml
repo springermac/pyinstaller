@@ -156,10 +156,8 @@ addons:
   # See https://docs.travis-ci.com/user/installing-dependencies/#installing-packages-on-macos.
   homebrew:
     packages:
-    - python
-    # Update to Python 3.7 via homebrew.
-    # Disabled, since this takes a HUGE amount of test time.
-    #update: true
+      - python@3
+    update: true
 
 install:
   # Update pip.
