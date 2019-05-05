@@ -508,8 +508,6 @@ def pyi_builder(tmpdir, monkeypatch, request, pyi_modgraph):
     except AttributeError:
         pass
 
-    if is_darwin or is_linux:
-        request.addfinalizer(del_temp_dir)
     if is_win and os.environ['APPVEYOR']:
         if hasattr(request.node, 'rep_setup') and request.node.rep_setup.passed:
             if hasattr(request.node, 'rep_call') and not request.node.rep_call.passed:
@@ -518,7 +516,6 @@ def pyi_builder(tmpdir, monkeypatch, request, pyi_modgraph):
                 args = ['appveyor', 'PushArtifact', archive]
                 print(args)
                 psutil.Popen(args, stdout=sys.stdout, stderr=sys.stderr)
-    return AppBuilder(tmp, request.param, pyi_modgraph)
 
 
 # Fixture for .spec based tests.
