@@ -33,6 +33,7 @@ jobs:
     # in a stage.
     - stage: Test - PyInstaller
       os: osx
+      osx_image: xcode10.2
       language: minimal
       cache:
         directories:
@@ -64,6 +65,7 @@ jobs:
 
     - stage: Test - Libraries
       os: osx
+      osx_image: xcode10.2
       language: minimal
       cache:
         directories:
