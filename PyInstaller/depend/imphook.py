@@ -19,6 +19,7 @@ import os.path
 
 from ..exceptions import ImportErrorWhenRunningHook
 from .. import log as logging
+from ..log import TRACE
 from ..compat import expand_path, importlib_load_source
 from .imphookapi import PostGraphAPI
 from ..building.utils import format_binaries_and_datas
@@ -607,6 +608,8 @@ class AdditionalFilesCache(object):
 
     def add(self, modname, binaries, datas):
 
+        logger.log(TRACE, "%s added binaries: %s", modname, binaries)
+        logger.log(TRACE, "%s added datas: %s", modname, datas)
         self._binaries.setdefault(modname, [])
         self._binaries[modname].extend(binaries or [])
         self._datas.setdefault(modname, [])
