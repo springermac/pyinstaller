@@ -27,8 +27,10 @@ import os
 from PyInstaller.utils.hooks import collect_glib_share_files, collect_glib_translations, exec_statement, get_gi_typelibs
 
 binaries, datas, hiddenimports = get_gi_typelibs('Gst', '1.0')
+print(datas)
 
 datas += collect_glib_share_files('gstreamer-1.0')
+print(datas)
 
 hiddenimports += ["gi.repository.Gio"]
 
@@ -38,6 +40,7 @@ for prog in ['gst-plugins-bad-1.0',
              'gst-plugins-ugly-1.0',
              'gstreamer-1.0']:
     datas += collect_glib_translations(prog)
+    print(datas)
 
 statement = """
 import os

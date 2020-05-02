@@ -224,7 +224,9 @@ def collect_glib_share_files(*path):
     for data_dir in glib_data_dirs:
         p = os.path.join(data_dir, *path)
         logger.debug("Glib data search path: %s", p)
-        collected += collect_system_data_files(p, destdir=destdir, include_py_files=False)
+        t = collect_system_data_files(p, destdir=destdir, include_py_files=False)
+        logger.debug("Glib data files: %s", t)
+        collected += t
 
     return collected
 
