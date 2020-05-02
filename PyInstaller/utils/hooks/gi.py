@@ -213,6 +213,7 @@ def get_glib_sysconf_dirs():
 def collect_glib_share_files(*path):
     """path is relative to the system data directory (eg, /usr/share)"""
     glib_data_dirs = get_glib_system_data_dirs()
+    logger.debug("Glib data dirs: %s", glib_data_dirs)
     if glib_data_dirs is None:
         return []
 
@@ -222,6 +223,7 @@ def collect_glib_share_files(*path):
     collected = []
     for data_dir in glib_data_dirs:
         p = os.path.join(data_dir, *path)
+        logger.debug("Glib data search path: %s", p)
         collected += collect_system_data_files(p, destdir=destdir, include_py_files=False)
 
     return collected
