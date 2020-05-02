@@ -786,15 +786,15 @@ def collect_system_data_files(path, destdir=None, include_py_files=False):
     # Accept only strings as paths.
     if not isinstance(path, string_types):
         raise TypeError('path must be a str')
-    if not path.endswith(os.sep):
-        path += os.sep
-        logger.debug("collect_system_data_files sep: %s", path)
     # The call to ``remove_prefix`` below assumes a path separate of ``os.sep``,
     # which may not be true on Windows; Windows allows Linux path separators in
     # filenames. Fix this by normalizing the path.
     logger.debug("collect_system_data_files path: %s", path)
     path = os.path.normpath(path)
     logger.debug("collect_system_data_files normpath: %s", path)
+    if not path.endswith(os.sep):
+        path += os.sep
+        logger.debug("collect_system_data_files sep: %s", path)
     path = os.path.dirname(path)
     logger.debug("collect_system_data_files dirname: %s", path)
     # Ensure `path` ends with a single slash
